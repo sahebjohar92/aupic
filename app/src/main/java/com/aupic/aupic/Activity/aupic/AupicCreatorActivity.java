@@ -3,6 +3,7 @@ package com.aupic.aupic.Activity.aupic;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.os.Handler;
 import android.widget.ImageView;
@@ -171,6 +175,74 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                 startActivityForResult(mediaIntent, Activity.RESULT_FIRST_USER);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.aupic_creator_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.action_delete).setVisible(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                showDeleteImageAlertBox();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        openMainActivity();
+    }
+
+    private void showDeleteImageAlertBox() {
+
+        new AlertDialog.Builder(this)
+            .setTitle("Delete Image")
+            .setMessage("Are you sure you want to remove this image?")
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    deleteImage();
+                }
+            })
+            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            })
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
+    }
+
+    private void deleteImage() {
+
+        if (selectedImagesMap.size() > 1) {
+
+            String imagePathToBeRemoved = selectedImagesDtoFirstImage.getImagePath();
+
+            if ( null != selectedImagesMap.get(imagePathToBeRemoved)) {
+
+                selectedImagesMap.remove(imagePathToBeRemoved);
+                imageAudioMap.remove(imagePathToBeRemoved);
+                initialize(null);
+            }
+        } else {
+            openMainActivity();
+        }
     }
 
     private void initialize(String selectedImageFromSideBar) {
@@ -405,14 +477,6 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
-        startActivity(intent);
-    }
-
     private void startRecording(String audioFileName) {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -644,6 +708,13 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         mediaPlayer.reset();
         playAudio = StringConstants.RESET_AND_PLAY;
         playBtn.setImageResource(R.drawable.play_btn);
+    }
+
+    private void openMainActivity() {
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+        startActivity(intent);
     }
 
 }

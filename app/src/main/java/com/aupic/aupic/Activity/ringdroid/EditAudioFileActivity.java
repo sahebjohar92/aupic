@@ -266,7 +266,6 @@ public class EditAudioFileActivity extends AupFragmentActivity implements Marker
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_save).setVisible(true);
         menu.findItem(R.id.action_reset).setVisible(true);
-//        menu.findItem(R.id.action_about).setVisible(true);
         return true;
     }
 
