@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#e0dac4" >
+
+    <GridView
+        android:id="@+id/phoneAlbumGrid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="6dp"
+        android:horizontalSpacing="6dp"
+        android:padding="8dp"
+        android:focusable="true"
+        android:clickable="true" >
+
+    </GridView>
+
+</RelativeLayout>

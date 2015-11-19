@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="@dimen/size_12">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/size_28"
+        android:text="@string/add_images"
+        android:gravity="center"
+        android:padding="@dimen/size_10"
+        android:textColor="@color/royal_blue"
+        android:textStyle="italic"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/size_8"
+        android:layout_marginTop="@dimen/size_24"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_choose_camera"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/camera_launcher"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/royal_blue"
+                android:textSize="@dimen/size_18"
+                android:text="@string/camera"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_choose_gallery"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/gallery_launcher"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/royal_blue"
+                android:textSize="@dimen/size_18"
+                android:text="@string/gallery"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

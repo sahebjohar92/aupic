@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Aupic</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="coming_soon">Coming Very Soon To Your App Store</string>
+    <string name="app_name_full">Audio Pic</string>
+    <string name="choose_pic">Choose from Gallery</string>
+    <string name="click_pic">Click Photo</string>
+    <string name="upload">Upload</string>
+    <string name="choose_photos">Choose Photos</string>
+    <string name="go">Go</string>
+    <string name="gallery">Gallery</string>
+    <string name="gallery_albums">Albums</string>
+    <string name="media_albums">Media Albums</string>
+    <string name="all_songs">All Songs</string>
+    <string name="aupic_editor">Aupic Editor</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="recording">Recording .....</string>
+    <string name="save">Save</string>
+    <string name="add_images">Add Images From .....</string>
+    <string name="camera">Camera</string>
+    <string name="edit_audio">Edit Your Audio File</string>
+    <string name="time_separator">-::-</string>
+
+    <string name="start_marker">Start marker</string>
+    <string name="end_marker">End marker</string>
+    <string name="rewind">Rewind</string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
+    <string name="ffwd">Fast forward</string>
+    <string name="zoom_in">Zoom In</string>
+    <string name="zoom_out">Zoom Out</string>
+    <string name="save_button">Save</string>
+
+    <string name="start_label">Start:</string>
+    <string name="end_label">End:</string>
+
+    <string name="progress_dialog_loading">Loading…</string>
+    <string name="progress_dialog_recording">Recording…</string>
+    <string name="progress_dialog_saving">Saving…</string>
+    <string name="progress_dialog_cancel">Cancel</string>
+    <string name="progress_dialog_stop">Stop</string>
+
+    <string name="alert_title_success">Success</string>
+    <string name="alert_title_failure">Error</string>
+    <string name="alert_ok_button">OK</string>
+    <string name="alert_yes_button">Yes, please!</string>
+    <string name="alert_no_button">No, thanks.</string>
+
+    <string name="save_success_message">Saved!</string>
+    <string name="default_ringtone_success_message">Changed default ringtone</string>
+    <string name="default_notification_success_message">Changed default notification sound</string>
+    <string name="play_error">Unable to play this media file</string>
+    <string name="no_unique_filename">Unable to find unique filename</string>
+    <string name="record_error">Error recording audio</string>
+    <string name="too_small_error">Can\'t save a file that small, try making it longer.</string>
+    <string name="write_error">Error writing file</string>
+    <string name="read_error">Error reading file</string>
+
+    <string name="no_space_error">Your SD card is full, there is not enough space to save this file.</string>
+
+    <string name="bad_extension_error">Sorry, Ringdroid is not yet able to edit files of type</string>
+    <string name="no_extension_error">Sorry, Ringdroid can\'t edit a file if it doesn\'t have an extension like .mp3 or .wav</string>
+
+    <!--
+     Choose Contact Activity
+     -->
+
+    <string name="choose_contact_title">Assign ringtone to which contact?</string>
+    <string name="success_contact_ringtone">Successfully assigned ringtone to:</string>
+    <string name="time_seconds">seconds</string>
+
+    <string name="edit_intent">Edit</string>
+
+    <string name="menu_save">Save</string>
+    <string name="menu_reset">Reset</string>
+
+
+    <string name="file_save_title">Save As:</string>
+    <string name="file_save_button_save">Save</string>
+    <string name="file_save_button_cancel">Cancel</string>
+
+    <string name="ringtone_type_label">Type:</string>
+
+    <string name="type_music">Music</string>
+    <string name="type_alarm">Alarm</string>
+    <string name="type_notification">Notification</string>
+    <string name="type_ringtone">Ringtone</string>
+
+    <string name="ringtone_name_label">Name:</string>
+
+    <string name="artist_name">Aupic</string>
+</resources>

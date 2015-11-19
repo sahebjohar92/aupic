@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e0dac4">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="3"
+        android:background="@drawable/border_box_maroon"
+        >
+
+        <ListView
+            android:id="@+id/side_bar_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#e0dac4"
+            android:dividerHeight="4dp"
+            android:padding="@dimen/size_5">
+
+        </ListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/border_box_maroon"
+            android:layout_weight="1"
+            android:padding="@dimen/size_8">
+
+            <com.aupic.aupic.Graphics.SquareImageWithoutFade
+                android:id="@+id/selected_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/red_tick"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/border_box_maroon"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/record_audio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/record"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:layout_marginBottom="@dimen/size_12"
+                />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/media_player"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_5"
+                android:orientation="vertical"
+                android:background="@color/light_orange"
+                tools:visibility="visible"
+                android:layout_marginLeft="@dimen/size_3"
+                android:layout_marginStart="@dimen/size_3"
+                android:layout_marginRight="2dp"
+                android:layout_marginEnd="2dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <ImageView
+                        android:id="@+id/play_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/play_btn"/>
+
+                    <SeekBar
+                        android:id="@+id/seek_bar"
+                        android:layout_marginTop="@dimen/size_8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                         />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/size_28"
+                    android:layout_marginStart="@dimen/size_28"
+                    android:layout_marginBottom="@dimen/size_4">
+
+                    <TextView
+                        android:id="@+id/start_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/maroon"
+                        android:textSize="@dimen/size_18"
+                        android:textStyle="bold"
+                        tools:text="0:00"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/size_18"
+                        android:textStyle="bold"
+                        android:text="@string/time_separator"/>
+
+                    <TextView
+                        android:id="@+id/total_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/maroon"
+                        android:textSize="@dimen/size_18"
+                        android:textStyle="bold"
+                        tools:text="0:00"
+                        />
+
+                    <ImageView
+                        android:id="@+id/edit_audio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:src="@drawable/cut"
+                        android:layout_marginLeft="@dimen/size_10"
+                        android:layout_marginStart="@dimen/size_10"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/size_15"
+                >
+
+                <ImageView
+                    android:id="@+id/media_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/media_audio"
+                    />
+
+                <ImageView
+                    android:id="@+id/done_create_aupic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/next"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

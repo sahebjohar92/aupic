@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="@dimen/size_12">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/size_28"
+        android:text="@string/recording"
+        android:gravity="center"
+        android:padding="@dimen/size_10"
+        android:textColor="@color/royal_blue"/>
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_10"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="@dimen/size_24"
+        android:visibility="visible"
+        android:textColor="@color/maroon"
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_10"
+        android:src="@drawable/mic"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/size_10">
+
+        <Button
+            android:id="@+id/btn_save_audio"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            style="@style/customButtonRoyalBlue"/>
+
+        <Button
+            android:id="@+id/btn_cancel_audio"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_8"
+            android:layout_marginStart="@dimen/size_8"
+            android:text="@string/cancel"
+            style="@style/customButtonRoyalBlue"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

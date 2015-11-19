@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/size_5"
+    android:background="@color/bright_foreground_material_dark">
+
+    <!--<FrameLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/size_12"-->
+        <!--android:layout_weight="1"-->
+        <!-->-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/media_select_box"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:src="@drawable/ic_action_brands"-->
+            <!--android:layout_marginRight="5dp"-->
+            <!--android:layout_marginEnd="5dp"-->
+            <!--android:scaleType="fitXY"-->
+            <!--/>-->
+        <!--<ImageView-->
+            <!--android:id="@+id/media_select_tick"-->
+            <!--android:layout_margin="@dimen/size_4"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:visibility="gone"-->
+            <!--tools:visibility="visible"-->
+            <!--android:src="@drawable/ic_tick_green"/>-->
+
+    <!--</FrameLayout>-->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/size_12"
+        android:layout_marginRight="@dimen/size_10"
+        android:layout_marginEnd="@dimen/size_10">
+
+        <CheckBox
+            android:id="@+id/select_check_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="15"
+        android:layout_marginTop="@dimen/size_8">
+
+        <TextView
+            android:id="@+id/media_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Title of song"
+            android:textSize="@dimen/size_15"
+            android:textColor="@color/maroon"
+            />
+
+        <TextView
+            android:id="@+id/media_album"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Album Name"
+            />
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_3"
+        android:orientation="vertical">
+    
+        <ImageView
+            android:id="@+id/media_play_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/play"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/audio_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="4:00"
+            android:layout_gravity="center"
+            android:textColor="@color/maroon"
+            android:visibility="gone"
+            />
+        
+    </LinearLayout>
+
+
+</LinearLayout>
