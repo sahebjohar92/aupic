@@ -2,11 +2,17 @@ package com.aupic.aupic.Holder.Gallery;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.aupic.aupic.R;
+import com.aupic.aupic.Task.ImageGallery.GetImagesTask;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +40,7 @@ public class GalleryImageViewHolder  {
 
     private SelectedImagesMap selectedImagesMapListener;
     private HashMap<String, Bitmap> selectedImagesMap;
+    private boolean isImageLoaded = false;
 
     public GalleryImageViewHolder(View view, HashMap<String, Bitmap> selectedImagesMap,
                                   SelectedImagesMap selectedImagesMapListener) {
@@ -49,6 +56,8 @@ public class GalleryImageViewHolder  {
         thumbImage.setId(position);
         imageSelectionTick.setId(position);
         selectBox.setImageResource(R.drawable.ic_action_brands);
+
+        thumbImage.setImageBitmap(null);
 
         thumbImage.setOnClickListener(new View.OnClickListener(){
 
@@ -71,7 +80,49 @@ public class GalleryImageViewHolder  {
             }
         });
 
-        thumbImage.setImageBitmap(thumbNails[position]);
+        if (!thumbImage.isInLayout()) {
+            isImageLoaded = true;
+            new GetImagesTask().execute(thumbImage, context, arrImagesPath[position]);
+        }
 
+        //thumbImage.setImageBitmap(getImageFromImagePath(context, arrImagesPath[position]));
     }
+
+//    private Bitmap getImageFromImagePath(Context context, String imagePath) {
+//
+//        Bitmap bitmap = null;
+//        try {
+//
+//            File f = new File(imagePath);
+//            if (f.exists()) {
+//
+//                Uri contentUri = Uri.fromFile(f);
+//                InputStream image_stream = context.getContentResolver().openInputStream(contentUri);
+//                bitmap = BitmapFactory.decodeStream(image_stream);
+//
+//                bitmap = getResizeBitmap(bitmap, 100);
+//            }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return bitmap;
+//    }
+//
+//    public Bitmap getResizeBitmap(Bitmap image, int maxSize) {
+//
+//        int width = image.getWidth();
+//        int height = image.getHeight();
+//
+//        float bitmapRatio = (float)width / (float) height;
+//        if (bitmapRatio > 0) {
+//            width = maxSize;
+//            height = (int) (width / bitmapRatio);
+//        } else {
+//            height = maxSize;
+//            width = (int) (height * bitmapRatio);
+//        }
+//        return Bitmap.createScaledBitmap(image, width, height, true);
+//    }
 }

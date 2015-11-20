@@ -35,6 +35,7 @@ public class MediaAudioViewHolder {
     CheckBox selectCheckBox;
 
     private int mediaPlayButton = 1;
+    private int songInitialized = 2;
     private MediaAudioViewHolder.getCheckedPositionFromCheckBox listener;
     MediaAudioViewHolder.getCheckedMediaFromCheckBox audioActivityListener;
 
@@ -59,7 +60,7 @@ public class MediaAudioViewHolder {
     public void render(final Context context, final MediaAudioDto mediaAudioDto, final int position,
                        int checkedPosition, int previousPosition) {
 
-        final boolean isSelected[] = {false, false};
+        final boolean isSelected[] = {false, false, false};
 
         if ( null != mediaAudioDto) {
 
@@ -76,14 +77,6 @@ public class MediaAudioViewHolder {
 
 
             final MediaPlayer mp = new MediaPlayer();
-            try{
-
-                mp.setDataSource(mediaAudioDto.getData());
-                mp.prepare();
-
-            }catch(Exception e){
-                e.printStackTrace();
-            }
 
             if (checkedPosition != -1 && checkedPosition == position) {
 
@@ -124,6 +117,17 @@ public class MediaAudioViewHolder {
             mediaButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    if (!isSelected[songInitialized]) {
+                        try {
+
+                            mp.setDataSource(mediaAudioDto.getData());
+                            mp.prepare();
+                            isSelected[songInitialized] = true;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
 
                     if (isSelected[mediaPlayButton]) {
                         isSelected[mediaPlayButton] = false;

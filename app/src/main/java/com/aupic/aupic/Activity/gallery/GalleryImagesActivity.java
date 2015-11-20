@@ -104,8 +104,8 @@ public class GalleryImagesActivity extends AupFragmentActivity implements Galler
             int dataColumnIndex = imageCursor
                     .getColumnIndex(MediaStore.Images.Media.DATA);
 
-            thumbNails[i] = MediaStore.Images.Thumbnails.getThumbnail(getContentResolver(), id,
-                                                    MediaStore.Images.Thumbnails.MINI_KIND, null);
+            //thumbNails[i] = MediaStore.Images.Thumbnails.getThumbnail(getContentResolver(), id,
+            //                                        MediaStore.Images.Thumbnails.MINI_KIND, null);
             arrPath[i] = imageCursor.getString(dataColumnIndex);
         }
 

@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aupic.aupic.Activity.base.AupFragmentActivity;
 import com.aupic.aupic.Activity.camera.CameraActivityNew;
@@ -34,6 +35,7 @@ import com.aupic.aupic.Adaptors.Aupic_Creator.AupicSideBarImageAdaptor;
 import com.aupic.aupic.Constant.IntentConstants;
 import com.aupic.aupic.Constant.StringConstants;
 import com.aupic.aupic.Event.AppBus;
+import com.aupic.aupic.Helper.MergeAudioHelper;
 import com.aupic.aupic.Helper.SeekBarHelper;
 import com.aupic.aupic.Holder.Aupic_Creator.AupicSideBarViewHolder;
 import com.aupic.aupic.Holder.Aupic_Creator.ChooseImagesViewHolder;
@@ -76,6 +78,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     private String audioFileName;
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private Handler mHandler = new Handler();
+    private MergeAudioHelper mediaAudioHelper = new MergeAudioHelper();
     private SeekBarHelper utils = new SeekBarHelper();
     private long songDuration;
 
@@ -388,8 +391,8 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         stopRecording();
         addAudioToMediaScanner();
 
-        String imagePath = selectedImagesDtoFirstImage.getImagePath();
-        MediaAudioDto mediaAudioDto = new MediaAudioDto();
+        final String imagePath = selectedImagesDtoFirstImage.getImagePath();
+        final MediaAudioDto mediaAudioDto = new MediaAudioDto();
 
         MediaPlayer mP = new MediaPlayer();
 
@@ -406,11 +409,39 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
             e.printStackTrace();
         }
 
-        mediaAudioDto.setData(audioFileName);
+//        mediaAudioDto.setData(audioFileName);
+//
+//        imageAudioMap.put(imagePath, mediaAudioDto);
+//
+//        initializeMediaPlayer();
 
-        imageAudioMap.put(imagePath, mediaAudioDto);
+        if (null != imageAudioMap.get(imagePath)) {
 
-        initializeMediaPlayer();
+            final MediaAudioDto mediaAudioDtoInternal = imageAudioMap.get(imagePath);
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Merge Audio")
+                    .setMessage("Do you want your recorded audio to be merged with your previously " +
+                            "selected audio or to overwrite it?")
+                    .setPositiveButton(R.string.merge, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            mergeAudioFiles(mediaAudioDtoInternal.getData(), audioFileName,
+                                            mediaAudioDto, imagePath);
+                        }
+                    })
+                    .setNegativeButton(R.string.overwrite, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            replaceOrMakeCurrentAudioFile(mediaAudioDto, imagePath);
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        } else {
+
+            replaceOrMakeCurrentAudioFile(mediaAudioDto, imagePath);
+        }
     }
 
     @Override
@@ -475,6 +506,33 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                 initialize(null);
             }
         }
+    }
+
+    private void mergeAudioFiles(String firstFileName, String secondFileName, MediaAudioDto mediaAudioDto,
+                                String imagePath) {
+
+        String mergedFile = getRecorderAudioFileName();
+        boolean merged = mediaAudioHelper.getMergedAudioFile(firstFileName, secondFileName,
+                                                             mergedFile);
+
+        if (merged) {
+
+            audioFileName = mergedFile;
+            replaceOrMakeCurrentAudioFile(mediaAudioDto, imagePath);
+
+        } else {
+
+            Toast.makeText(this, "Unable to merge File, previous audio kept", Toast.LENGTH_SHORT)
+            .show();
+        }
+    }
+
+    private void replaceOrMakeCurrentAudioFile(MediaAudioDto mediaAudioDto, String imagePath) {
+
+        mediaAudioDto.setData(audioFileName);
+        imageAudioMap.put(imagePath, mediaAudioDto);
+
+        initializeMediaPlayer();
     }
 
     private void startRecording(String audioFileName) {
