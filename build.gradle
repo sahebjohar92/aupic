@@ -15,5 +15,8 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url "${project.rootDir}/creativesdk-repo/release" // Location of the CSDK repo
+        }
     }
 }
