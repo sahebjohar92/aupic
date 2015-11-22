@@ -6,4 +6,10 @@
         android:title="@string/menu_delete"
         app:showAsAction="always"
         />
+
+    <item android:id="@+id/action_edit_image"
+        android:title="@string/edit_image"
+        android:icon="@drawable/edit"
+        app:showAsAction="ifRoom"
+        />
 </menu>

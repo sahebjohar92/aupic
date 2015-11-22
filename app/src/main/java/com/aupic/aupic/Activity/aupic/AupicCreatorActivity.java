@@ -44,10 +44,14 @@ import com.aupic.aupic.Holder.Media.RecordAudioViewHolder;
 import com.aupic.aupic.Holder.Media.SelectedImagesDTO;
 import com.aupic.aupic.MainActivity;
 import com.aupic.aupic.R;
+import com.aviary.android.feather.sdk.AviaryIntent;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -192,6 +196,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_delete).setVisible(true);
+        menu.findItem(R.id.action_edit_image).setVisible(true);
         return true;
     }
 
@@ -201,6 +206,11 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
             case R.id.action_delete:
                 showDeleteImageAlertBox();
                 return true;
+
+            case R.id.action_edit_image:
+                editImage();
+                return true;
+
             default:
                 return false;
         }
@@ -210,6 +220,17 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     public void onBackPressed() {
         super.onBackPressed();
         openMainActivity();
+    }
+
+    private void editImage() {
+
+        Uri imageUri = Uri.parse(selectedImagesDtoFirstImage.getImagePath());
+
+        Intent imageEditorIntent = new AviaryIntent.Builder(this)
+                                   .setData(imageUri)
+                                   .build();
+
+        startActivityForResult(imageEditorIntent, Activity.RESULT_FIRST_USER);
     }
 
     private void showDeleteImageAlertBox() {
@@ -494,9 +515,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
                 initializeMediaPlayer();
 
-            }
-
-            if (null != data.getSerializableExtra(IntentConstants.SELECTED_IMAGES_MAP)) {
+            } else  if (null != data.getSerializableExtra(IntentConstants.SELECTED_IMAGES_MAP)) {
 
                 HashMap<String, Bitmap> receivedImagesMap = (HashMap<String, Bitmap>) data.
                         getSerializableExtra(IntentConstants.SELECTED_IMAGES_MAP);
@@ -504,6 +523,60 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                 selectedImagesMap.putAll(receivedImagesMap);
                 mStartPlaying = true;
                 initialize(null);
+
+            } else if (requestCode == Activity.RESULT_FIRST_USER) {
+
+                Uri mImageUri = data.getData();
+
+                String imagePath = mImageUri.toString();
+                String path = mImageUri.getLastPathSegment();
+
+                File sd = Environment.getExternalStoragePublicDirectory(StringConstants.DIRECTORY +
+                        StringConstants.PICTURES);
+
+                String destinationImagePath= sd+"/" + path;
+
+                try {
+
+                    if (!sd.exists()) {
+                        if (!sd.mkdirs()) {
+                            Log.d("Image Directory Name", "Oops! Failed create "
+                                    + sd + " directory");
+                            return;
+                        }
+                    }
+
+                    if (sd.canWrite()) {
+
+                        File source = new File(imagePath);
+                        File destination= new File(destinationImagePath);
+                        if (source.exists()) {
+                            FileChannel src = new FileInputStream(source).getChannel();
+                            FileChannel dst = new FileOutputStream(destination).getChannel();
+                            dst.transferFrom(src, 0, src.size());
+                            src.close();
+                            dst.close();
+                        }
+                        if (source.exists()) {
+                            source.delete();
+                        }
+                        galleryAddPic(destinationImagePath);
+                    }else{
+                        Toast.makeText(getApplicationContext(), "SDCARD Not writable.", Toast.LENGTH_LONG).show();
+                    }
+                }catch (Exception e) {
+                    destinationImagePath = imagePath;
+                    System.out.println("Error :" + e.getMessage());
+                }
+
+                MediaAudioDto mediaAudioDto = imageAudioMap.get(selectedImagesDtoFirstImage.
+                                                                getImagePath());
+
+                selectedImagesMap.remove(selectedImagesDtoFirstImage.getImagePath());
+                selectedImagesMap.put(destinationImagePath, null);
+                imageAudioMap.put(destinationImagePath, mediaAudioDto);
+
+                initialize(destinationImagePath);
             }
         }
     }
@@ -773,6 +846,14 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
         startActivity(intent);
+    }
+
+    private void galleryAddPic(String editedPhoto) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(editedPhoto);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 
 }

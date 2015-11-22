@@ -48,10 +48,12 @@
         android:protectionLevel="signature" />
 
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <activity
             android:name=".SplashScreenActivity"
             android:label="@string/app_name" >
@@ -118,6 +120,11 @@
             </intent-filter>
 
         </activity>
+
+        <provider
+            android:name="com.aviary.android.feather.sdk.internal.cds.AviaryCdsProvider"
+            android:authorities="${applicationId}.AviaryCdsProvider"
+            android:exported="false" />
 
     </application>
 
