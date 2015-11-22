@@ -6,6 +6,8 @@
     <color name="maroon">#7c0405</color>
     <color name="royal_blue">#4169e1</color>
     <color name="white">#ffffff</color>
+    <color name="light_grey">#DCDCDC</color>
+    <color name="dark_grey">#A9A9A9</color>
     
     <color name="grid_line">#66ffffff</color>
     <color name="waveform_selected">#33b5e5</color>

@@ -2,6 +2,7 @@ package com.aupic.aupic.Adaptors.Gallery;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +26,13 @@ public class GalleryImageAdaptors extends BaseAdapter {
     String[] arrImagesPath;
     HashMap<String, Bitmap> selectedImagesMap;
     GalleryImageViewHolder.SelectedImagesMap selectedImagesMapListener;
+    private LruCache<String, Bitmap> mMemoryCache;
 
     public GalleryImageAdaptors(Context context, int count, boolean[] thumbnailSelection,
                                 Bitmap[] thumbNails, String[] arrImagesPath,
                                 HashMap<String, Bitmap> selectedImagesMap,
-                                GalleryImageViewHolder.SelectedImagesMap listener) {
+                                GalleryImageViewHolder.SelectedImagesMap listener,
+                                LruCache<String, Bitmap> mMemoryCache) {
 
         this.context                   = context;
         this.count                     = count;
@@ -38,6 +41,7 @@ public class GalleryImageAdaptors extends BaseAdapter {
         this.arrImagesPath             = arrImagesPath;
         this.selectedImagesMap         = selectedImagesMap;
         this.selectedImagesMapListener = listener;
+        this.mMemoryCache              = mMemoryCache;
     }
 
     public int getCount() {
@@ -62,7 +66,8 @@ public class GalleryImageAdaptors extends BaseAdapter {
 
             convertView = mInflater.inflate(R.layout.gallery_items, null);
             galleryImageViewHolder = new GalleryImageViewHolder(convertView, selectedImagesMap,
-                                                                selectedImagesMapListener);
+                                                                selectedImagesMapListener,
+                                                                mMemoryCache);
             convertView.setTag(galleryImageViewHolder);
 
         } else {
