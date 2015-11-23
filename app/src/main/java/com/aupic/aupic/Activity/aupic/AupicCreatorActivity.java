@@ -9,7 +9,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -527,56 +529,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
             } else if (requestCode == Activity.RESULT_FIRST_USER) {
 
                 Uri mImageUri = data.getData();
-
-                String imagePath = mImageUri.toString();
-                String path = mImageUri.getLastPathSegment();
-
-                File sd = Environment.getExternalStoragePublicDirectory(StringConstants.DIRECTORY +
-                        StringConstants.PICTURES);
-
-                String destinationImagePath= sd+"/" + path;
-
-                try {
-
-                    if (!sd.exists()) {
-                        if (!sd.mkdirs()) {
-                            Log.d("Image Directory Name", "Oops! Failed create "
-                                    + sd + " directory");
-                            return;
-                        }
-                    }
-
-                    if (sd.canWrite()) {
-
-                        File source = new File(imagePath);
-                        File destination= new File(destinationImagePath);
-                        if (source.exists()) {
-                            FileChannel src = new FileInputStream(source).getChannel();
-                            FileChannel dst = new FileOutputStream(destination).getChannel();
-                            dst.transferFrom(src, 0, src.size());
-                            src.close();
-                            dst.close();
-                        }
-                        if (source.exists()) {
-                            source.delete();
-                        }
-                        galleryAddPic(destinationImagePath);
-                    }else{
-                        Toast.makeText(getApplicationContext(), "SDCARD Not writable.", Toast.LENGTH_LONG).show();
-                    }
-                }catch (Exception e) {
-                    destinationImagePath = imagePath;
-                    System.out.println("Error :" + e.getMessage());
-                }
-
-                MediaAudioDto mediaAudioDto = imageAudioMap.get(selectedImagesDtoFirstImage.
-                                                                getImagePath());
-
-                selectedImagesMap.remove(selectedImagesDtoFirstImage.getImagePath());
-                selectedImagesMap.put(destinationImagePath, null);
-                imageAudioMap.put(destinationImagePath, mediaAudioDto);
-
-                initialize(destinationImagePath);
+                handleEditImageCallBack(mImageUri);
             }
         }
     }
@@ -854,6 +807,79 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
+    }
+
+    private void handleEditImageCallBack(Uri mImageUri) {
+
+        String imagePath = mImageUri.toString();
+        String imageName = mImageUri.getLastPathSegment();
+
+        File sd = Environment.getExternalStoragePublicDirectory(StringConstants.DIRECTORY +
+                StringConstants.PICTURES);
+
+        String destinationImagePath= sd+"/" + imageName;
+
+        try {
+
+            if (!sd.exists()) {
+                if (!sd.mkdirs()) {
+                    Log.d("Image Directory Name", "Oops! Failed create "
+                            + sd + " directory");
+                    return;
+                }
+            }
+
+            if (sd.canWrite()) {
+
+                File source = new File(imagePath);
+                File destination= new File(destinationImagePath);
+                if (source.exists()) {
+                    FileChannel src = new FileInputStream(source).getChannel();
+                    FileChannel dst = new FileOutputStream(destination).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+
+                galleryAddPic(destinationImagePath);
+
+                if (source.exists()) {
+                    source.delete();
+                    callBroadCast();
+                }
+
+            }
+        }catch (Exception e) {
+            destinationImagePath = imagePath;
+            Log.d("Aupic image Editor", e.getMessage());
+        }
+
+        MediaAudioDto mediaAudioDto = imageAudioMap.get(selectedImagesDtoFirstImage.
+                getImagePath());
+
+        selectedImagesMap.remove(selectedImagesDtoFirstImage.getImagePath());
+        selectedImagesMap.put(destinationImagePath, null);
+        imageAudioMap.put(destinationImagePath, mediaAudioDto);
+
+        initialize(destinationImagePath);
+    }
+
+    public void callBroadCast() {
+        if (Build.VERSION.SDK_INT >= 14) {
+            Log.e("-->", " >= 14");
+            MediaScannerConnection.scanFile(this, new String[]{Environment.getExternalStorageDirectory().toString()},
+                    null, new MediaScannerConnection.OnScanCompletedListener() {
+
+                        public void onScanCompleted(String path, Uri uri) {
+                            Log.e("ExternalStorage", "Scanned " + path + ":");
+                            Log.e("ExternalStorage", "-> uri=" + uri);
+                        }
+                    });
+        } else {
+            Log.e("-->", " < 14");
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+                    Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+        }
     }
 
 }
