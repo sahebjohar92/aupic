@@ -154,20 +154,23 @@ public class GalleryAlbumActivity extends AupFragmentActivity implements Gallery
 
                     Bitmap firstAlbumName = getImageFromGalleryName(bucket);
 
-                    album.setBucketId(bucketId);
-                    album.setBucketName(bucket);
-                    album.setDateTaken(date);
-                    album.setData(data);
-                    album.setTotalCount(photoCountByAlbum(bucket));
-                    album.setAlbumImage(firstAlbumName);
+                    if (null != firstAlbumName) {
 
-                    arrayListAlbums.add(album);
+                        album.setBucketId(bucketId);
+                        album.setBucketName(bucket);
+                        album.setDateTaken(date);
+                        album.setData(data);
+                        album.setTotalCount(photoCountByAlbum(bucket));
+                        album.setAlbumImage(firstAlbumName);
 
-                    Log.v("ListingImages", " bucket=" + bucket
+                        arrayListAlbums.add(album);
 
-                            + "  date_taken=" + date + "  _data=" + data
+                        Log.v("ListingImages", " bucket=" + bucket
 
-                            + " bucket_id=" + bucketId);
+                                + "  date_taken=" + date + "  _data=" + data
+
+                                + " bucket_id=" + bucketId);
+                    }
 
                 }
 

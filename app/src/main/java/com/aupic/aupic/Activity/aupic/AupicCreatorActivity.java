@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -640,9 +641,13 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
     private void stopMediaPlayer() {
 
-        mediaPlayer.stop();
-        mediaPlayer.release();
-        mediaPlayer = null;
+        if ( null != mediaPlayer) {
+
+            //removeMediaPlayerCallBacks();
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
     private void startMediaPlayer() {
@@ -691,6 +696,10 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
             long totalDuration = songDuration;
             long currentDuration = mediaPlayer.getCurrentPosition();
+
+            if ( currentDuration > totalDuration) {
+                currentDuration = 0L;
+            }
 
             // Displaying Total Duration time
             totalTime.setText("" + utils.milliSecondsToTimer(totalDuration));
@@ -744,6 +753,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
     private void hideSeekBar() {
 
+        removeMediaPlayerCallBacks();
         llMediaPlayer.setVisibility(View.GONE);
         mediaPlayer.reset();
         seekBar.setProgress(0);
@@ -751,21 +761,19 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
     private void showSeekBar() {
 
-        mediaPlayer.reset();
-        seekBar.setProgress(0);
-        llMediaPlayer.setVisibility(View.VISIBLE);
         audioFileName = selectedImagesDtoFirstImage.getAudioPath();
         songDuration = selectedImagesDtoFirstImage.getAudioDuration();
-        startTime.setText(""+utils.milliSecondsToTimer(0));
-        totalTime.setText(""+utils.milliSecondsToTimer(songDuration));
+        removeMediaPlayerCallBacks();
+        initializeMediaPlayer();
     }
 
     private void initializeAfterSongCompletion() {
 
-        seekBar.setProgress(0);
+        removeMediaPlayerCallBacks();
         mediaPlayer.reset();
         playAudio = StringConstants.RESET_AND_PLAY;
         playBtn.setImageResource(R.drawable.play_btn);
+        seekBar.setProgress(0);
     }
 
     private void openMainActivity() {
@@ -773,6 +781,11 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
         startActivity(intent);
+    }
+
+    private void removeMediaPlayerCallBacks() {
+
+        mHandler.removeCallbacksAndMessages(mUpdateTimeTask);
     }
 
 }
