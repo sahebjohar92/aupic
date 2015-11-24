@@ -26,6 +26,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aupic.aupic.Activity.AupicDisplay.AupicDisplayActivity;
 import com.aupic.aupic.Activity.base.AupFragmentActivity;
 import com.aupic.aupic.Activity.camera.CameraActivityNew;
 import com.aupic.aupic.Activity.gallery.GalleryAlbumActivity;
@@ -53,7 +54,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Future;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -112,6 +112,9 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
     @InjectView(R.id.total_time)
     TextView totalTime;
+
+    @InjectView(R.id.done_create_aupic)
+    ImageView doneCreateAupic;
 
     @Override
     protected int getTitleText() {
@@ -177,6 +180,18 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                 Intent mediaIntent = new Intent(context, EditAudioFileActivity.class);
                 mediaIntent.putExtra(IntentConstants.SELECTED_AUDIO, audioFileName);
                 startActivityForResult(mediaIntent, Activity.RESULT_FIRST_USER);
+            }
+        });
+
+        doneCreateAupic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+               if (imageAudioMap.size() > 0) {
+                   Intent intent = new Intent(context, AupicDisplayActivity.class);
+                   intent.putExtra(IntentConstants.AUPIC_MAP, imageAudioMap);
+                   startActivity(intent);
+               }
             }
         });
     }
@@ -531,6 +546,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     private void replaceOrMakeCurrentAudioFile(MediaAudioDto mediaAudioDto, String imagePath) {
 
         mediaAudioDto.setData(audioFileName);
+        mediaAudioDto = setDuration(mediaAudioDto);
         imageAudioMap.put(imagePath, mediaAudioDto);
 
         initializeMediaPlayer();
@@ -553,6 +569,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     }
 
     private void stopRecording() {
+        mStartPlaying = true;
         mRecorder.stop();
         mRecorder.release();
         mRecorder = null;
@@ -786,6 +803,26 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     private void removeMediaPlayerCallBacks() {
 
         mHandler.removeCallbacksAndMessages(mUpdateTimeTask);
+    }
+
+    private MediaAudioDto setDuration(MediaAudioDto mediaAudioDto) {
+
+        MediaPlayer mP = new MediaPlayer();
+
+        try {
+            mP.setDataSource(audioFileName);
+            mP.prepare();
+
+            mediaAudioDto.setDuration(mP.getDuration());
+            songDuration = mP.getDuration();
+            mP.stop();
+            mP.release();
+            mP = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return mediaAudioDto;
     }
 
 }

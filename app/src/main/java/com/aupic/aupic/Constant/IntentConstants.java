@@ -10,4 +10,5 @@ public class IntentConstants {
     public static final String SELECTED_AUDIO          = "selected_audio";
     public static final String NEW_ACTIVITY            = "new_activity";
     public static final String EDITED_AUDIO            = "edited_audio";
+    public static final String AUPIC_MAP               = "aupic_map";
 }
