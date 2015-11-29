@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-
+    <dimen name="size_60">60sp</dimen>
     <dimen name="size_50">50sp</dimen>
     <dimen name="size_45">45sp</dimen>
     <dimen name="size_40">40sp</dimen>

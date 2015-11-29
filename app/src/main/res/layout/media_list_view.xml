@@ -10,7 +10,7 @@
         android:divider="#e0dac4"
         android:dividerHeight="4dp"
         android:padding="@dimen/size_5"
-        android:layout_marginBottom="@dimen/size_50">
+        android:layout_marginBottom="@dimen/size_60">
 
     </ListView>
 
