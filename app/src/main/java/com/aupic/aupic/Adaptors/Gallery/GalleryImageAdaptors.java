@@ -26,13 +26,11 @@ public class GalleryImageAdaptors extends BaseAdapter {
     String[] arrImagesPath;
     HashMap<String, Bitmap> selectedImagesMap;
     GalleryImageViewHolder.SelectedImagesMap selectedImagesMapListener;
-    private LruCache<String, Bitmap> mMemoryCache;
 
     public GalleryImageAdaptors(Context context, int count, boolean[] thumbnailSelection,
                                 Bitmap[] thumbNails, String[] arrImagesPath,
                                 HashMap<String, Bitmap> selectedImagesMap,
-                                GalleryImageViewHolder.SelectedImagesMap listener,
-                                LruCache<String, Bitmap> mMemoryCache) {
+                                GalleryImageViewHolder.SelectedImagesMap listener) {
 
         this.context                   = context;
         this.count                     = count;
@@ -41,7 +39,6 @@ public class GalleryImageAdaptors extends BaseAdapter {
         this.arrImagesPath             = arrImagesPath;
         this.selectedImagesMap         = selectedImagesMap;
         this.selectedImagesMapListener = listener;
-        this.mMemoryCache              = mMemoryCache;
     }
 
     public int getCount() {
@@ -66,8 +63,7 @@ public class GalleryImageAdaptors extends BaseAdapter {
 
             convertView = mInflater.inflate(R.layout.gallery_items, null);
             galleryImageViewHolder = new GalleryImageViewHolder(convertView, selectedImagesMap,
-                                                                selectedImagesMapListener,
-                                                                mMemoryCache);
+                                                                selectedImagesMapListener);
             convertView.setTag(galleryImageViewHolder);
 
         } else {

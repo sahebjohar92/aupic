@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.aupic.aupic.R;
 import com.aupic.aupic.Task.ImageGallery.GetImagesTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,16 +42,13 @@ public class GalleryImageViewHolder  {
 
     private SelectedImagesMap selectedImagesMapListener;
     private HashMap<String, Bitmap> selectedImagesMap;
-    private LruCache<String, Bitmap> mMemoryCache;
 
     public GalleryImageViewHolder(View view, HashMap<String, Bitmap> selectedImagesMap,
-                                  SelectedImagesMap selectedImagesMapListener,
-                                  LruCache<String, Bitmap> mMemoryCache) {
+                                  SelectedImagesMap selectedImagesMapListener) {
 
         ButterKnife.inject(this, view);
         this.selectedImagesMap         = selectedImagesMap;
         this.selectedImagesMapListener = selectedImagesMapListener;
-        this.mMemoryCache              = mMemoryCache;
     }
 
     public void render(Context context, final int position, final boolean[] thumbnailSelection,
@@ -60,8 +58,6 @@ public class GalleryImageViewHolder  {
         thumbImage.setTag(position);
         imageSelectionTick.setId(position);
         selectBox.setImageResource(R.drawable.ic_action_brands);
-
-        thumbImage.setImageBitmap(null);
 
         thumbImage.setOnClickListener(new View.OnClickListener(){
 
@@ -84,18 +80,22 @@ public class GalleryImageViewHolder  {
             }
         });
 
-        Bitmap image = getBitmapFromMemCache(arrImagesPath[position]);
-
-        if (null == image) {
-            thumbImage.setImageBitmap(null);
-            new GetImagesTask(mMemoryCache).execute(thumbImage, context, arrImagesPath[position]);
-        } else {
-            thumbImage.setImageBitmap(image);
-        }
+//        Using Picasso so commenting this code
+//        Bitmap image = getBitmapFromMemCache(arrImagesPath[position]);
+//
+//        if (null == image) {
+//            thumbImage.setImageBitmap(null);
+//            new GetImagesTask(mMemoryCache).execute(thumbImage, context, arrImagesPath[position]);
+//        } else {
+//            thumbImage.setImageBitmap(image);
+//        }
+        Uri uri = Uri.fromFile(new File(arrImagesPath[position]));
+        Picasso.with(context)
+                .load(uri)
+                .placeholder(null)
+                .resize(250, 300)
+                .into(thumbImage);
     }
 
-    public Bitmap getBitmapFromMemCache(String key) {
-        return mMemoryCache.get(key);
-    }
 
 }

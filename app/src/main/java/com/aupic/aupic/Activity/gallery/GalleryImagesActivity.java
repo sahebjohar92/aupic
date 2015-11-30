@@ -39,7 +39,6 @@ public class GalleryImagesActivity extends AupFragmentActivity implements Galler
     private String albumName = StringConstants.DEFAULT_ALBUM_NAME;
     private HashMap<String, Bitmap> selectedImagesMap = new HashMap<>();
     private boolean newActivity = true;
-    private LruCache<String, Bitmap> mMemoryCache;
 
     @InjectView(R.id.uploadDONE)
     Button uploadButton;
@@ -65,22 +64,6 @@ public class GalleryImagesActivity extends AupFragmentActivity implements Galler
         AppBus.getInstance().register(this);
 
         ButterKnife.inject(this);
-
-        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-
-        // Use 1/8th of the available memory for this memory cache.
-        final int cacheSize = maxMemory / 8;
-
-        Log.d("Size of memory cache", ""+cacheSize);
-
-        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
-            @Override
-            protected int sizeOf(String key, Bitmap bitmap) {
-                // The cache size will be measured in kilobytes rather than
-                // number of items.
-                return bitmap.getByteCount() / 1024;
-            }
-        };
 
         if (null != getIntent() && null != getIntent().getExtras()) {
 
@@ -126,8 +109,7 @@ public class GalleryImagesActivity extends AupFragmentActivity implements Galler
         }
 
         galleryImageAdaptors = new GalleryImageAdaptors(this, count, thumbnailSelection,
-                                                        thumbNails, arrPath, selectedImagesMap, this,
-                                                        mMemoryCache);
+                                                        thumbNails, arrPath, selectedImagesMap, this);
         phoneImageGrid.setAdapter(galleryImageAdaptors);
         imageCursor.close();
     }
