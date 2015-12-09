@@ -37,6 +37,8 @@ import com.aupic.aupic.Constant.IntentConstants;
 import com.aupic.aupic.Constant.StringConstants;
 import com.aupic.aupic.Event.AppBus;
 import com.aupic.aupic.Helper.MergeAudioHelper;
+import com.aupic.aupic.Helper.MixAudioHelper;
+import com.aupic.aupic.Helper.Sample_FFmpeg;
 import com.aupic.aupic.Helper.SeekBarHelper;
 import com.aupic.aupic.Holder.Aupic_Creator.AupicSideBarViewHolder;
 import com.aupic.aupic.Holder.Aupic_Creator.ChooseImagesViewHolder;
@@ -82,6 +84,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     private MergeAudioHelper mediaAudioHelper = new MergeAudioHelper();
     private SeekBarHelper utils = new SeekBarHelper();
     private long songDuration;
+    private MixAudioHelper mixAudioHelper = new MixAudioHelper();
 
     @InjectView(R.id.selected_image)
     com.aupic.aupic.Graphics.SquareImageWithoutFade selectedFirstImageView;
@@ -500,15 +503,49 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
             if (null != data.getSerializableExtra(IntentConstants.SELECTED_AUDIO)) {
 
-                String imagePath = selectedImagesDtoFirstImage.getImagePath();
-                MediaAudioDto mediaAudioDto = (MediaAudioDto) data.getSerializableExtra(IntentConstants.
+
+                final String imagePath = selectedImagesDtoFirstImage.getImagePath();
+                final MediaAudioDto mediaAudioDto = (MediaAudioDto) data.getSerializableExtra(IntentConstants.
                                                SELECTED_AUDIO);
 
                 audioFileName = mediaAudioDto.getData();
-                songDuration = Long.valueOf(mediaAudioDto.getDuration().toString());
-                imageAudioMap.put(imagePath, mediaAudioDto);
 
-                initializeMediaPlayer();
+                if (null == imageAudioMap.get(imagePath)) {
+
+
+                    imageAudioMap.put(imagePath, mediaAudioDto);
+                    songDuration = Long.valueOf(mediaAudioDto.getDuration().toString());
+                    initializeMediaPlayer();
+
+                } else {
+
+                    final MediaAudioDto mediaAudioDtoInternal = new MediaAudioDto();
+                    mediaAudioDto.setDuration(Integer.valueOf(mediaAudioDto.getDuration().toString()));
+
+                    Intent intent = new Intent(this, Sample_FFmpeg.class);
+                    startActivity(intent);
+
+
+//                    new AlertDialog.Builder(this)
+//                        .setTitle("Merge Audio")
+//                        .setMessage("Do you want 2nd audio to be mixed with your previously " +
+//                                "selected audio or to overwrite it?")
+//                        .setPositiveButton(R.string.merge, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.dismiss();
+//                                mergeAudioFiles(imageAudioMap.get(imagePath).getData(), audioFileName,
+//                                        mediaAudioDtoInternal, imagePath);
+//                            }
+//                        })
+//                        .setNegativeButton(R.string.overwrite, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.dismiss();
+//                                replaceOrMakeCurrentAudioFile(mediaAudioDto, imagePath);
+//                            }
+//                        })
+//                        .setIcon(android.R.drawable.ic_dialog_alert)
+//                        .show();
+                }
 
             }
 
@@ -528,8 +565,11 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                                 String imagePath) {
 
         String mergedFile = getRecorderAudioFileName();
-        boolean merged = mediaAudioHelper.getMergedAudioFile(firstFileName, secondFileName,
-                                                             mergedFile);
+//        boolean merged = mediaAudioHelper.getMergedAudioFile(firstFileName, secondFileName,
+//                                                             mergedFile);
+
+        boolean merged = mixAudioHelper.mixAudios(firstFileName, secondFileName,
+                mergedFile);
 
         if (merged) {
 
@@ -746,7 +786,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     }
 
     /**
-     * When user stops moving the progress hanlder
+     * When user stops moving the progress handler
      * */
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
