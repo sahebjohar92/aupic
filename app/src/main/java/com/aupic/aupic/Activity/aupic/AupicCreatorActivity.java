@@ -36,17 +36,17 @@ import com.aupic.aupic.Adaptors.Aupic_Creator.AupicSideBarImageAdaptor;
 import com.aupic.aupic.Constant.IntentConstants;
 import com.aupic.aupic.Constant.StringConstants;
 import com.aupic.aupic.Event.AppBus;
-import com.aupic.aupic.Helper.MergeAudioHelper;
-import com.aupic.aupic.Helper.MixAudioHelper;
-import com.aupic.aupic.Helper.Sample_FFmpeg;
 import com.aupic.aupic.Helper.SeekBarHelper;
 import com.aupic.aupic.Holder.Aupic_Creator.AupicSideBarViewHolder;
 import com.aupic.aupic.Holder.Aupic_Creator.ChooseImagesViewHolder;
+import com.aupic.aupic.Holder.FFmpeg.AudioMixingHolder;
 import com.aupic.aupic.Holder.Media.MediaAudioDto;
 import com.aupic.aupic.Holder.Media.RecordAudioViewHolder;
 import com.aupic.aupic.Holder.Media.SelectedImagesDTO;
 import com.aupic.aupic.MainActivity;
 import com.aupic.aupic.R;
+import com.aupic.aupic.Task.FFmpeg.AudioMixingTask;
+import com.squareup.otto.Subscribe;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,10 +81,8 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     private String audioFileName;
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private Handler mHandler = new Handler();
-    private MergeAudioHelper mediaAudioHelper = new MergeAudioHelper();
     private SeekBarHelper utils = new SeekBarHelper();
     private long songDuration;
-    private MixAudioHelper mixAudioHelper = new MixAudioHelper();
 
     @InjectView(R.id.selected_image)
     com.aupic.aupic.Graphics.SquareImageWithoutFade selectedFirstImageView;
@@ -229,6 +227,24 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     public void onBackPressed() {
         super.onBackPressed();
         openMainActivity();
+    }
+
+    @Subscribe
+    public void onAsyncTaskResult(AudioMixingHolder audioMixingHolder) {
+
+        if (audioMixingHolder.getIsMixed()) {
+
+            Toast.makeText(this, "Done mixing audios", Toast.LENGTH_SHORT).show();
+            audioFileName = audioMixingHolder.getMixedFile();
+            addAudioToMediaScanner();
+            replaceOrMakeCurrentAudioFile(audioMixingHolder.getMediaAudioDto(),
+                                          audioMixingHolder.getImagePath());
+
+        } else {
+
+            Toast.makeText(this, "Unable to merge File, previous audio kept", Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     private void showDeleteImageAlertBox() {
@@ -428,19 +444,13 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
             e.printStackTrace();
         }
 
-//        mediaAudioDto.setData(audioFileName);
-//
-//        imageAudioMap.put(imagePath, mediaAudioDto);
-//
-//        initializeMediaPlayer();
-
         if (null != imageAudioMap.get(imagePath)) {
 
             final MediaAudioDto mediaAudioDtoInternal = imageAudioMap.get(imagePath);
 
             new AlertDialog.Builder(this)
-                    .setTitle("Merge Audio")
-                    .setMessage("Do you want your recorded audio to be merged with your previously " +
+                    .setTitle("Mix Audio")
+                    .setMessage("Do you want your recorded audio to be mixed with your previously " +
                             "selected audio or to overwrite it?")
                     .setPositiveButton(R.string.merge, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -522,29 +532,25 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                     final MediaAudioDto mediaAudioDtoInternal = new MediaAudioDto();
                     mediaAudioDto.setDuration(Integer.valueOf(mediaAudioDto.getDuration().toString()));
 
-                    Intent intent = new Intent(this, Sample_FFmpeg.class);
-                    startActivity(intent);
-
-
-//                    new AlertDialog.Builder(this)
-//                        .setTitle("Merge Audio")
-//                        .setMessage("Do you want 2nd audio to be mixed with your previously " +
-//                                "selected audio or to overwrite it?")
-//                        .setPositiveButton(R.string.merge, new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                dialog.dismiss();
-//                                mergeAudioFiles(imageAudioMap.get(imagePath).getData(), audioFileName,
-//                                        mediaAudioDtoInternal, imagePath);
-//                            }
-//                        })
-//                        .setNegativeButton(R.string.overwrite, new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                dialog.dismiss();
-//                                replaceOrMakeCurrentAudioFile(mediaAudioDto, imagePath);
-//                            }
-//                        })
-//                        .setIcon(android.R.drawable.ic_dialog_alert)
-//                        .show();
+                    new AlertDialog.Builder(this)
+                        .setTitle("Merge Audio")
+                        .setMessage("Do you want 2nd audio to be mixed with your previously " +
+                                "selected audio or to overwrite it?")
+                        .setPositiveButton(R.string.merge, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                mergeAudioFiles(imageAudioMap.get(imagePath).getData(), audioFileName,
+                                        mediaAudioDtoInternal, imagePath);
+                            }
+                        })
+                        .setNegativeButton(R.string.overwrite, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                replaceOrMakeCurrentAudioFile(mediaAudioDto, imagePath);
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
                 }
 
             }
@@ -565,22 +571,9 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                                 String imagePath) {
 
         String mergedFile = getRecorderAudioFileName();
-//        boolean merged = mediaAudioHelper.getMergedAudioFile(firstFileName, secondFileName,
-//                                                             mergedFile);
+        new AudioMixingTask(this).execute(firstFileName, secondFileName, mergedFile, imagePath,
+                                          mediaAudioDto);
 
-        boolean merged = mixAudioHelper.mixAudios(firstFileName, secondFileName,
-                mergedFile);
-
-        if (merged) {
-
-            audioFileName = mergedFile;
-            replaceOrMakeCurrentAudioFile(mediaAudioDto, imagePath);
-
-        } else {
-
-            Toast.makeText(this, "Unable to merge File, previous audio kept", Toast.LENGTH_SHORT)
-            .show();
-        }
     }
 
     private void replaceOrMakeCurrentAudioFile(MediaAudioDto mediaAudioDto, String imagePath) {

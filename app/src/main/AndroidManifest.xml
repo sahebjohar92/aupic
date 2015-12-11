@@ -124,12 +124,6 @@
             android:screenOrientation="portrait">
 
         </activity>
-
-        <activity android:name=".Helper.Sample_FFmpeg"
-            android:screenOrientation="portrait">
-
-        </activity>
-
     </application>
 
 </manifest>
