@@ -7,7 +7,7 @@
         android:id="@+id/media_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#e0dac4"
+        android:divider="@color/light_orange"
         android:dividerHeight="4dp"
         android:padding="@dimen/size_5"
         android:layout_marginBottom="@dimen/size_60">
@@ -28,7 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/done"
-            style="@style/customButton"/>
+            style="@style/customButtonDarkGreen"
+            />
 
         <Button
             android:id="@+id/cancel_audio_button"
@@ -38,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/cancel"
-            style="@style/customButton"/>
+            style="@style/customButtonDarkGreen"/>
 
     </LinearLayout>
 

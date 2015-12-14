@@ -42,7 +42,7 @@ public class GalleryAlbumsAdaptor extends ArrayAdapter<GalleryPhotoAlbum> {
 
         if ( convertView == null) {
 
-            convertView = mInflater.inflate(R.layout.albums, null);
+            convertView = mInflater.inflate(R.layout.albums_new, null);
             galleryAlbumsViewHolder = new GalleryAlbumsViewHolder(convertView, newActivity,
                                                                   selectedAlbumCallBack);
 

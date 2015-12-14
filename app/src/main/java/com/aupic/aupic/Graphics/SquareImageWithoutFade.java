@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 /**
- * Created by root on 4/11/15.
+ * Created by saheb on 4/11/15.
  */
 public class SquareImageWithoutFade extends ImageView {
 

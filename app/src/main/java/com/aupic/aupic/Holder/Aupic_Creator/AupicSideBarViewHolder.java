@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.aupic.aupic.Holder.Media.RecordAudioViewHolder;
@@ -19,6 +20,9 @@ import butterknife.InjectView;
  * Created by saheb on 5/11/15.
  */
 public class AupicSideBarViewHolder {
+
+    @InjectView(R.id.gallery_image_layout)
+    FrameLayout galleryImageLayout;
 
     @InjectView(R.id.thumbImage)
     com.aupic.aupic.Graphics.SquareImageWithoutFade thumbImage;
@@ -71,6 +75,7 @@ public class AupicSideBarViewHolder {
             thumbImage.setImageResource(R.drawable.add);
             selectBox.setVisibility(View.GONE);
 
+            galleryImageLayout.setBackground(null);
             thumbImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

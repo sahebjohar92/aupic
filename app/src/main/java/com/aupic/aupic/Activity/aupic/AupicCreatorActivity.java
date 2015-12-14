@@ -36,6 +36,8 @@ import com.aupic.aupic.Adaptors.Aupic_Creator.AupicSideBarImageAdaptor;
 import com.aupic.aupic.Constant.IntentConstants;
 import com.aupic.aupic.Constant.StringConstants;
 import com.aupic.aupic.Event.AppBus;
+import com.aupic.aupic.Helper.GenerateFileNames;
+import com.aupic.aupic.Helper.GenerateVideo;
 import com.aupic.aupic.Helper.SeekBarHelper;
 import com.aupic.aupic.Holder.Aupic_Creator.AupicSideBarViewHolder;
 import com.aupic.aupic.Holder.Aupic_Creator.ChooseImagesViewHolder;
@@ -56,6 +58,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -82,7 +85,9 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private Handler mHandler = new Handler();
     private SeekBarHelper utils = new SeekBarHelper();
+    private GenerateFileNames generateFileNames = new GenerateFileNames();
     private long songDuration;
+    private GenerateVideo generateVideo = new GenerateVideo();
 
     @InjectView(R.id.selected_image)
     com.aupic.aupic.Graphics.SquareImageWithoutFade selectedFirstImageView;
@@ -164,7 +169,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
             public void onClick(View v) {
 
                 if (mStartPlaying) {
-                    String file = getRecorderAudioFileName();
+                    String file = generateFileNames.getRecorderAudioFileName();
                     audioFileName = file;
                     startRecording(file);
                     mStartPlaying = false;
@@ -189,9 +194,24 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
             public void onClick(View v) {
 
                if (imageAudioMap.size() > 0) {
-                   Intent intent = new Intent(context, AupicDisplayActivity.class);
-                   intent.putExtra(IntentConstants.AUPIC_MAP, imageAudioMap);
-                   startActivity(intent);
+//                   Intent intent = new Intent(context, AupicDisplayActivity.class);
+//                   intent.putExtra(IntentConstants.AUPIC_MAP, imageAudioMap);
+//                   startActivity(intent);
+
+                   for (HashMap.Entry<String, MediaAudioDto> map: imageAudioMap.entrySet()){
+
+                       String image = map.getKey();
+                       String audio = map.getValue().getData();
+                       String video = generateFileNames.getVideoFileName();
+
+                       generateVideo.createVideoFromImageAndAudio(image, audio , video);
+
+                       Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                       File f = new File(video);
+                       Uri contentUri = Uri.fromFile(f);
+                       mediaScanIntent.setData(contentUri);
+                       context.sendBroadcast(mediaScanIntent);
+                   }
                }
             }
         });
@@ -570,7 +590,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     private void mergeAudioFiles(String firstFileName, String secondFileName, MediaAudioDto mediaAudioDto,
                                 String imagePath) {
 
-        String mergedFile = getRecorderAudioFileName();
+        String mergedFile = generateFileNames.getRecorderAudioFileName();
         new AudioMixingTask(this).execute(firstFileName, secondFileName, mergedFile, imagePath,
                                           mediaAudioDto);
 
@@ -606,24 +626,6 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         mRecorder.stop();
         mRecorder.release();
         mRecorder = null;
-    }
-
-    private String getRecorderAudioFileName() {
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String audioFileName = "Audio_" + timeStamp;
-        File storageDir = Environment.getExternalStoragePublicDirectory(StringConstants.DIRECTORY +
-                          StringConstants.AUDIO);
-
-        if (!storageDir.exists()) {
-            if (!storageDir.mkdirs()) {
-                Log.d("Audio Directory Name", "Oops! Failed create "
-                        + storageDir + " directory");
-                return null;
-            }
-        }
-
-        return storageDir + "/" + audioFileName + StringConstants.AUDIO_EXTENSION;
     }
 
     private void showRecordAlertBox(Context context, RecordAudioViewHolder.audioRecorderCallBack

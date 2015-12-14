@@ -37,6 +37,38 @@
 
     </style>
 
+    <style name="customButtonWhite">
+
+        <item name="android:layout_height">20dp</item>
+        <item name="android:text">Go to Store</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">@dimen/size_5</item>
+        <item name="android:paddingBottom">@dimen/size_5</item>
+        <item name="android:paddingLeft">@dimen/size_10</item>
+        <item name="android:paddingRight">@dimen/size_10</item>
+        <item name="android:background">@drawable/rounded_button_white</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/size_14</item>
+
+    </style>
+
+    <style name="customButtonDarkGreen">
+
+        <item name="android:layout_height">34dp</item>
+        <item name="android:text">Go to Store</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">@dimen/size_5</item>
+        <item name="android:paddingBottom">@dimen/size_5</item>
+        <item name="android:paddingLeft">@dimen/size_10</item>
+        <item name="android:paddingRight">@dimen/size_10</item>
+        <item name="android:background">@drawable/rounded_dark_green</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/size_14</item>
+
+    </style>
+
     <style name="AudioFileInfoOverlayText">
         <item name="android:paddingLeft">4sp</item>
         <item name="android:paddingBottom">4sp</item>

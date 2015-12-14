@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.LruCache;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.aupic.aupic.R;
@@ -72,7 +73,7 @@ public class GalleryImageViewHolder  {
                     thumbnailSelection[id] = false;
                 } else {
                     selectedImagesMap.put(arrImagesPath[id], null);
-                    selectBox.setImageResource(R.drawable.red_tick);
+                    selectBox.setImageResource(R.drawable.blue_tick);
                     thumbnailSelection[id] = true;
                 }
 

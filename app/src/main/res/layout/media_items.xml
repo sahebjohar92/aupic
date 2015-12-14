@@ -61,13 +61,14 @@
             android:layout_height="wrap_content"
             tools:text="Title of song"
             android:textSize="@dimen/size_15"
-            android:textColor="@color/maroon"
+            android:textColor="@color/black"
             />
 
         <TextView
             android:id="@+id/media_album"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/medium_green"
             tools:text="Album Name"
             />
 

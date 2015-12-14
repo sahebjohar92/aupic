@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aupic.aupic.Activity.gallery.GalleryImagesActivity;
@@ -20,17 +21,17 @@ import butterknife.InjectView;
  */
 public class GalleryAlbumsViewHolder {
 
-    @InjectView(R.id.album_image)
+    @InjectView(R.id.album_image_new)
     ImageView albumImage;
 
-    @InjectView(R.id.album_name)
+    @InjectView(R.id.album_name_new)
     TextView albumName;
 
-    @InjectView(R.id.album_images_count)
+    @InjectView(R.id.album_images_count_new)
     TextView albumImagesCount;
 
-    @InjectView(R.id.album_layout)
-    FrameLayout albumLayout;
+    @InjectView(R.id.album_layout_new)
+    LinearLayout albumLayout;
 
     private boolean newActivity;
     private SelectedAlbumCallBack listener;

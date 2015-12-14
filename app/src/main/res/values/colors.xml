@@ -24,4 +24,19 @@
     <color name="type_bkgnd_music">#88000000</color>
     <color name="type_bkgnd_unsupported">#88cccccc</color>
 
+    <color name="black">#000</color>
+    <color name="skin_color">#e0dac4</color>
+    <color name="light_gray">#ddd</color>
+    <color name="medium_grey">#bdbdbd</color>
+    <color name="very_light_blue">#C1ECFA</color>
+
+    <color name="dark_orange">#F88017</color>
+    <color name="green">#16F77F</color>
+    <color name="sky_blue">#02A0E3</color>
+    <color name="dark_green">#006400</color>
+    <color name="medium_green">#00cc00</color>
+    <color name="off_white">#ccffff</color>
+    <color name="brownish">#cc6600</color>
+    <color name="light_brownish">#ffc080</color>
+
 </resources>

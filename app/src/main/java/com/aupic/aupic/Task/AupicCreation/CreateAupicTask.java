@@ -31,6 +31,6 @@ public class CreateAupicTask extends AsyncTask<Object, String, String> {
 
     private void createAudio(String imagePath, String audioPath) {
 
-        generateVideo.createVideoFromImageAndAudio(imagePath, audioPath);
+        //generateVideo.createVideoFromImageAndAudio(imagePath, audioPath);
     }
 }

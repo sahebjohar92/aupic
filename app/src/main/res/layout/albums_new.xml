@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/box_with_shadow"
+    android:id="@+id/album_layout_new">
+
+    <com.aupic.aupic.Graphics.SquareImageWithoutFade
+        android:id="@+id/album_image_new"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/menu_save"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginTop="@dimen/size_14">
+
+        <TextView
+            android:id="@+id/album_name_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_14"
+            android:textColor="@color/black"
+            android:textStyle="italic"
+            android:minLines="2"
+            tools:text="WhatsApp"/>
+
+        <TextView
+            android:id="@+id/album_images_count_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_14"
+            tools:text="220"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>
