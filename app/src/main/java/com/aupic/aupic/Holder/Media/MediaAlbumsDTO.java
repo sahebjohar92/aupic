@@ -3,7 +3,7 @@ package com.aupic.aupic.Holder.Media;
 import android.graphics.Bitmap;
 
 /**
- * Created by root on 9/11/15.
+ * Created by saheb on 9/11/15.
  */
 public class MediaAlbumsDTO {
 

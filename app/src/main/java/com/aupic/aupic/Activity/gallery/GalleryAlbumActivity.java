@@ -152,16 +152,16 @@ public class GalleryAlbumActivity extends AupFragmentActivity implements Gallery
 
                     album = new GalleryPhotoAlbum();
 
-                    Bitmap firstAlbumName = getImageFromGalleryName(bucket);
+                    GalleryPhotoAlbum firstAlbumImageDto = getImageFromGalleryName(bucket);
 
-                    if (null != firstAlbumName) {
+                    if (null != firstAlbumImageDto.getAlbumImage()) {
 
                         album.setBucketId(bucketId);
                         album.setBucketName(bucket);
                         album.setDateTaken(date);
                         album.setData(data);
                         album.setTotalCount(photoCountByAlbum(bucket));
-                        album.setAlbumImage(firstAlbumName);
+                        album.setAlbumImage(firstAlbumImageDto.getAlbumImage());
 
                         arrayListAlbums.add(album);
 
@@ -214,13 +214,15 @@ public class GalleryAlbumActivity extends AupFragmentActivity implements Gallery
         return 0;
     }
 
-    private Bitmap getImageFromGalleryName(String bucketName) {
+    private GalleryPhotoAlbum getImageFromGalleryName(String bucketName) {
 
         int count;
         int id;
         int image_column_index;
+        String imageName = null;
         Bitmap thumbNails = null;
 
+        GalleryPhotoAlbum galleryPhotoAlbum = new GalleryPhotoAlbum();
         String searchParams = "bucket_display_name = \"" + bucketName + "\"";
 
         try {
@@ -237,7 +239,7 @@ public class GalleryAlbumActivity extends AupFragmentActivity implements Gallery
             if (count > 0) {
                 imageCursor.moveToPosition(0);
                 id = imageCursor.getInt(image_column_index);
-
+                imageName = imageCursor.getString(image_column_index);
                 thumbNails = MediaStore.Images.Thumbnails.getThumbnail(getContentResolver(), id,
                         MediaStore.Images.Thumbnails.MINI_KIND, null);
             }
@@ -247,7 +249,10 @@ public class GalleryAlbumActivity extends AupFragmentActivity implements Gallery
             e.printStackTrace();
         }
 
-        return thumbNails;
+        galleryPhotoAlbum.setAlbumImage(thumbNails);
+        galleryPhotoAlbum.setData(imageName);
+
+        return galleryPhotoAlbum;
     }
 
 }

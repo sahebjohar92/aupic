@@ -30,9 +30,6 @@ public class GalleryImageViewHolder  {
     @InjectView(R.id.thumbImage)
     ImageView thumbImage;
 
-    @InjectView(R.id.tick)
-    ImageView imageSelectionTick;
-
     @InjectView(R.id.select_box)
     ImageView selectBox;
 
@@ -57,7 +54,6 @@ public class GalleryImageViewHolder  {
 
         thumbImage.setId(position);
         thumbImage.setTag(position);
-        imageSelectionTick.setId(position);
         selectBox.setImageResource(R.drawable.ic_action_brands);
 
         thumbImage.setOnClickListener(new View.OnClickListener(){
@@ -81,15 +77,6 @@ public class GalleryImageViewHolder  {
             }
         });
 
-//        Using Picasso so commenting this code
-//        Bitmap image = getBitmapFromMemCache(arrImagesPath[position]);
-//
-//        if (null == image) {
-//            thumbImage.setImageBitmap(null);
-//            new GetImagesTask(mMemoryCache).execute(thumbImage, context, arrImagesPath[position]);
-//        } else {
-//            thumbImage.setImageBitmap(image);
-//        }
         Uri uri = Uri.fromFile(new File(arrImagesPath[position]));
         Picasso.with(context)
                 .load(uri)

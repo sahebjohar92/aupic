@@ -2,6 +2,7 @@ package com.aupic.aupic.Holder.Gallery;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -12,6 +13,9 @@ import com.aupic.aupic.Activity.gallery.GalleryImagesActivity;
 import com.aupic.aupic.Constant.IntentConstants;
 import com.aupic.aupic.Constant.StringConstants;
 import com.aupic.aupic.R;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -60,7 +64,13 @@ public class GalleryAlbumsViewHolder {
 
                 albumImagesCount.setText(String.valueOf(galleryPhotoAlbum.getTotalCount()));
 
-                albumImage.setImageBitmap(galleryPhotoAlbum.getAlbumImage());
+                Uri uri = Uri.fromFile(new File(galleryPhotoAlbum.getData()));
+                Picasso.with(context)
+                        .load(uri)
+                        .placeholder(null)
+                         .resize(225, 275)
+                        .into(albumImage);
+
                 albumImage.setHorizontalFadingEdgeEnabled(true);
                 albumImage.setVerticalFadingEdgeEnabled(true);
                 albumImage.setFadingEdgeLength(StringConstants.FADE_LENGTH);

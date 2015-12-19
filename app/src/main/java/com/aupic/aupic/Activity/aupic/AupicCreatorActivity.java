@@ -49,6 +49,7 @@ import com.aupic.aupic.MainActivity;
 import com.aupic.aupic.R;
 import com.aupic.aupic.Task.FFmpeg.AudioMixingTask;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -308,8 +309,12 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         if ( null != selectedImagesMap && selectedImagesMap.size() > 0) {
 
             initializeSelectedImagesDTOList(selectedImageFromSideBar);
-
-            selectedFirstImageView.setImageBitmap(selectedImagesDtoFirstImage.getImage());
+            Uri uri = Uri.fromFile(new File(selectedImagesDtoFirstImage.getImagePath()));
+            Picasso.with(this)
+                    .load(uri)
+                    .placeholder(null)
+                    .resize(240, 275)
+                    .into(selectedFirstImageView);
 
             if ( null != selectedImagesDtoFirstImage.getAudioPath() && !selectedImagesDtoFirstImage
                                                                         .getAudioPath().isEmpty()) {
@@ -339,7 +344,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
                 selectedImagesDtoFirstImage = new SelectedImagesDTO();
 
-                Bitmap image = getImageFromImagePath(entry.getKey(), true);
+                Bitmap image = getImageFromImagePath(entry.getKey(), false);
                 tempImagesMap.put(entry.getKey(), image);
                 selectedImagesDtoFirstImage.setImage(image);
 

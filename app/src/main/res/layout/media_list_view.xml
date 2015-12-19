@@ -7,7 +7,7 @@
         android:id="@+id/media_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@color/light_orange"
+        android:divider="@color/very_light_blue"
         android:dividerHeight="4dp"
         android:padding="@dimen/size_5"
         android:layout_marginBottom="@dimen/size_60">
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/light_orange"
+        android:background="@color/very_light_blue"
         android:orientation="horizontal"
         android:padding="@dimen/size_8">
 

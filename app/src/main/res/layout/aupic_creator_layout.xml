@@ -66,7 +66,7 @@
                     android:id="@+id/record_audio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/record"
+                    android:src="@drawable/record_green"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/size_10"
                     android:layout_marginBottom="@dimen/size_12"
@@ -81,10 +81,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_5"
                 android:orientation="vertical"
-                android:background="@color/light_orange"
+                android:background="@color/type_bkgnd_ringtone"
                 tools:visibility="visible"
-                android:layout_marginLeft="@dimen/size_3"
-                android:layout_marginStart="@dimen/size_3"
+                android:layout_marginLeft="@dimen/size_1"
+                android:layout_marginStart="@dimen/size_1"
                 android:layout_marginRight="2dp"
                 android:layout_marginEnd="2dp"
                 android:visibility="gone">
@@ -168,14 +168,14 @@
                     android:id="@+id/media_gallery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/media_audio"
+                    android:src="@drawable/media_green"
                     />
 
                 <ImageView
                     android:id="@+id/done_create_aupic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/next"
+                    android:src="@drawable/arrow_green"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"/>
 

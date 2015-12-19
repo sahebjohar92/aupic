@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -12,6 +13,9 @@ import android.widget.ImageView;
 import com.aupic.aupic.Holder.Media.RecordAudioViewHolder;
 import com.aupic.aupic.Holder.Media.SelectedImagesDTO;
 import com.aupic.aupic.R;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -50,15 +54,19 @@ public class AupicSideBarViewHolder {
 
         if ( null != selectedImagesDTO.getImagePath()) {
 
-            Bitmap m = selectedImagesDTO.getImage();
-            thumbImage.setImageBitmap(selectedImagesDTO.getImage());
+            Uri uri = Uri.fromFile(new File(selectedImagesDTO.getImagePath()));
+            Picasso.with(context)
+                    .load(uri)
+                    .placeholder(null)
+                    .resize(130, 150)
+                    .into(thumbImage);
 
             selectBox.setVisibility(View.GONE);
 
             if (null != selectedImagesDTO.getAudioPath() && !selectedImagesDTO.getAudioPath()
                     .isEmpty()) {
 
-                selectBox.setImageResource(R.drawable.red_tick);
+                selectBox.setImageResource(R.drawable.green_tick);
                 selectBox.setVisibility(View.VISIBLE);
             }
 

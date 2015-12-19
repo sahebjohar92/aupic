@@ -3,7 +3,7 @@ package com.aupic.aupic.Holder.Gallery;
 import android.graphics.Bitmap;
 
 /**
- * Created by root on 4/11/15.
+ * Created by saheb on 4/11/15.
  */
 public class GalleryPhotoAlbum {
 
