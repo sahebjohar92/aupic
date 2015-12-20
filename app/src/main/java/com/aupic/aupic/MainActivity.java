@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.aupic.aupic.Activity.base.AupFragmentActivity;
 import com.aupic.aupic.Activity.camera.CameraActivityNew;
@@ -17,14 +18,17 @@ import butterknife.InjectView;
 public class MainActivity extends AupFragmentActivity {
 
 
-    @InjectView(R.id.gallery)
-    ImageView phone_gallery;
+    @InjectView(R.id.gallery_aupic)
+    LinearLayout phone_gallery;
 
     @InjectView(R.id.camera)
-    ImageView camera;
+    LinearLayout camera;
 
-    @InjectView(R.id.aup_gallery)
-    ImageView aup_gallery;
+    @InjectView(R.id.view_aupic)
+    LinearLayout aup_gallery;
+
+    @InjectView(R.id.create_aupic)
+    LinearLayout create_aupic;
 
     @Override
     protected int getTitleText() {
@@ -74,5 +78,25 @@ public class MainActivity extends AupFragmentActivity {
 
             }
         });
+
+        create_aupic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                phone_gallery.postDelayed(new Runnable() {
+                    public void run() {
+                        phone_gallery.setVisibility(View.VISIBLE);
+                    }
+                }, 700);
+
+                camera.postDelayed(new Runnable() {
+                    public void run() {
+                        camera.setVisibility(View.VISIBLE);
+                    }
+                }, 350);
+            }
+        });
+
+
     }
 }

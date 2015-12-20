@@ -68,7 +68,7 @@ public class GalleryAlbumsViewHolder {
                 Picasso.with(context)
                         .load(uri)
                         .placeholder(null)
-                         .resize(225, 275)
+                         .resize(275, 325)
                         .into(albumImage);
 
                 albumImage.setHorizontalFadingEdgeEnabled(true);

@@ -313,7 +313,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
             Picasso.with(this)
                     .load(uri)
                     .placeholder(null)
-                    .resize(240, 275)
+                    .resize(300, 375)
                     .into(selectedFirstImageView);
 
             if ( null != selectedImagesDtoFirstImage.getAudioPath() && !selectedImagesDtoFirstImage
