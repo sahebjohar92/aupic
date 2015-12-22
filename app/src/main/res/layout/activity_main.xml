@@ -62,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/size_5">
+            android:layout_marginTop="@dimen/size_24">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -83,13 +83,14 @@
         </LinearLayout>
 
         <LinearLayout
-
+            android:id="@+id/child_create_aupic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="@dimen/size_5"
             android:layout_marginLeft="@dimen/size_45"
             android:layout_marginStart="@dimen/size_45"
+            android:layout_marginTop="-20dp"
+            android:visibility="gone"
             >
 
             <LinearLayout
@@ -98,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/size_5"
-                android:visibility="gone"
+                android:visibility="visible"
                 >
 
                 <ImageView
@@ -125,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/size_5"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
                     android:layout_width="wrap_content"

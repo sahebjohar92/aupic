@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.aupic.aupic.Activity.base.AupFragmentActivity;
 import com.aupic.aupic.Activity.camera.CameraActivityNew;
@@ -29,6 +32,11 @@ public class MainActivity extends AupFragmentActivity {
 
     @InjectView(R.id.create_aupic)
     LinearLayout create_aupic;
+
+    @InjectView(R.id.child_create_aupic)
+    LinearLayout child_create_aupic;
+
+    private boolean isChildVisible = false;
 
     @Override
     protected int getTitleText() {
@@ -76,6 +84,8 @@ public class MainActivity extends AupFragmentActivity {
             @Override
             public void onClick(View v) {
 
+
+                Toast.makeText(activity, "No Aupic available, create your 1st Aupic", Toast.LENGTH_LONG);
             }
         });
 
@@ -83,17 +93,18 @@ public class MainActivity extends AupFragmentActivity {
             @Override
             public void onClick(View v) {
 
-                phone_gallery.postDelayed(new Runnable() {
-                    public void run() {
-                        phone_gallery.setVisibility(View.VISIBLE);
-                    }
-                }, 700);
+                child_create_aupic.setVisibility(View.VISIBLE);
 
-                camera.postDelayed(new Runnable() {
-                    public void run() {
-                        camera.setVisibility(View.VISIBLE);
-                    }
-                }, 350);
+                if (!isChildVisible) {
+
+                    Animation animation = AnimationUtils.loadAnimation(activity, R.anim.move);
+                    create_aupic.startAnimation(animation);
+
+                    Animation animation1 = AnimationUtils.loadAnimation(activity, R.anim.slide);
+                    child_create_aupic.startAnimation(animation1);
+
+                    isChildVisible = false;
+                }
             }
         });
 
