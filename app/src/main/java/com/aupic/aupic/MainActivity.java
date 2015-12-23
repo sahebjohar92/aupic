@@ -6,14 +6,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.aupic.aupic.Activity.base.AupFragmentActivity;
 import com.aupic.aupic.Activity.camera.CameraActivityNew;
 import com.aupic.aupic.Activity.gallery.GalleryAlbumActivity;
+import com.aupic.aupic.Constant.IntentConstants;
 import com.aupic.aupic.Event.AppBus;
+import com.aupic.aupic.Activity.gallery.GalleryVideoActivity;
+import com.aupic.aupic.Holder.Gallery.VideoGalleryListDTO;
+import com.aupic.aupic.Task.AupicGallery.GetAupicGalleryTask;
+import com.squareup.otto.Subscribe;
 
 import butterknife.InjectView;
 
@@ -36,7 +40,9 @@ public class MainActivity extends AupFragmentActivity {
     @InjectView(R.id.child_create_aupic)
     LinearLayout child_create_aupic;
 
-    private boolean isChildVisible = false;
+    private boolean isChildVisible                  = false;
+    private Integer videoGallerySize                = null;
+    private VideoGalleryListDTO videoGalleryListDTO = new VideoGalleryListDTO();
 
     @Override
     protected int getTitleText() {
@@ -55,7 +61,16 @@ public class MainActivity extends AupFragmentActivity {
         super.onCreate(savedInstanceState);
         AppBus.getInstance().register(this);
 
+        new GetAupicGalleryTask().execute(this);
+
         initialize();
+    }
+
+    @Subscribe
+    public void onAsyncTaskResult(VideoGalleryListDTO videoGalleryDTOList) {
+
+        this.videoGalleryListDTO = videoGalleryDTOList;
+        videoGallerySize         = videoGalleryDTOList.getVideoGalleryDTOList().size();
     }
 
 
@@ -84,8 +99,16 @@ public class MainActivity extends AupFragmentActivity {
             @Override
             public void onClick(View v) {
 
+                if (videoGallerySize == 0) {
 
-                Toast.makeText(activity, "No Aupic available, create your 1st Aupic", Toast.LENGTH_LONG);
+                    Toast.makeText(activity, "No Aupic available", Toast.LENGTH_LONG).show();
+
+                } else {
+
+                    Intent videoIntent = new Intent(activity, GalleryVideoActivity.class);
+                    videoIntent.putExtra(IntentConstants.AUPIC_MAP, videoGalleryListDTO);
+                    startActivity(videoIntent);
+                }
             }
         });
 

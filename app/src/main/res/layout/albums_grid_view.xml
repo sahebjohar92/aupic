@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/very_light_blue" >
+    android:background="@color/very_light_blue"
+    android:id="@+id/ll_grid_view">
 
     <GridView
         android:id="@+id/phoneAlbumGrid"

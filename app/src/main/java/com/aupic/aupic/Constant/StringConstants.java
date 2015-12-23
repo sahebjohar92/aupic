@@ -9,6 +9,7 @@ public class StringConstants {
     public static final String PIC_PREFIX           = "Aupic";
     public static final String PICTURES             = "/Aupic Pictures";
     public static final String AUDIO                = "/Aupic Audio";
+    public static final String VIDEO                = "Aupic Video";
     public static final String CAMERA               = "Camera";
     public static final String DEFAULT_ALBUM_NAME   = "Camera";
     public static final String IMAGES               = "Images";
