@@ -8,7 +8,9 @@
     />
 
     <item android:id="@+id/action_reset"
+        android:icon="@drawable/reset"
         android:title="@string/menu_reset"
+        app:showAsAction="ifRoom"
     />
 
 </menu>

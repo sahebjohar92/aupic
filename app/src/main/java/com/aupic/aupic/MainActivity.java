@@ -129,7 +129,7 @@ public class MainActivity extends AupFragmentActivity {
                     Animation animation1 = AnimationUtils.loadAnimation(activity, R.anim.slide);
                     child_create_aupic.startAnimation(animation1);
 
-                    isChildVisible = false;
+                    isChildVisible = true;
                 }
             }
         });

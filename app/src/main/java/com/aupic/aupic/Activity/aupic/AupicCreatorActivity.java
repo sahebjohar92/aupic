@@ -89,6 +89,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     private GenerateFileNames generateFileNames = new GenerateFileNames();
     private long songDuration;
     private GenerateVideo generateVideo = new GenerateVideo();
+    private Menu menuGlobal;
 
     @InjectView(R.id.selected_image)
     com.aupic.aupic.Graphics.SquareImageWithoutFade selectedFirstImageView;
@@ -155,6 +156,15 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         final RecordAudioViewHolder.audioRecorderCallBack audioRecorderCallBackListener = this;
         seekBar.setOnSeekBarChangeListener(this);
         mediaPlayer.setOnCompletionListener(this);
+
+        selectedFirstImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                showDeleteAction();
+                return true;
+            }
+        });
 
         mediaGallery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,7 +239,8 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.action_delete).setVisible(true);
+        this.menuGlobal = menu;
+        menu.findItem(R.id.action_delete).setVisible(false);
         return true;
     }
 
@@ -305,6 +316,8 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     }
 
     private void initialize(String selectedImageFromSideBar) {
+
+        hideDeleteAction();
 
         if ( null != selectedImagesMap && selectedImagesMap.size() > 0) {
 
@@ -863,6 +876,22 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         }
 
         return mediaAudioDto;
+    }
+
+    private void showDeleteAction() {
+
+        if ( null != menuGlobal) {
+
+            menuGlobal.findItem(R.id.action_delete).setVisible(true);
+        }
+    }
+
+    private void hideDeleteAction() {
+
+        if ( null != menuGlobal) {
+
+            menuGlobal.findItem(R.id.action_delete).setVisible(false);
+        }
     }
 
 }
