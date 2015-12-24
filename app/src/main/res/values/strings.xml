@@ -85,6 +85,7 @@
     <string name="menu_save">Save</string>
     <string name="menu_reset">Reset</string>
     <string name="menu_delete">Delete</string>
+    <string name="menu_share">Share</string>
 
 
     <string name="file_save_title">Save As:</string>

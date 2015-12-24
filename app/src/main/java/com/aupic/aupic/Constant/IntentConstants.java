@@ -12,4 +12,5 @@ public class IntentConstants {
     public static final String EDITED_AUDIO            = "edited_audio";
     public static final String AUPIC_MAP               = "aupic_map";
     public static final String VIDEO_FILE_PATH         = "video_file";
+    public static final String MINE_TYPE               = "mime_type";
 }

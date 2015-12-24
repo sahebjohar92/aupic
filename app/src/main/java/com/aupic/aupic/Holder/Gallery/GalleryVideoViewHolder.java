@@ -57,6 +57,7 @@ public class GalleryVideoViewHolder {
                 @Override
                 public void onClick(View v) {
                     Intent videoViewIntent = new Intent(context, AupicDisplayActivity.class);
+                    videoViewIntent.putExtra(IntentConstants.MINE_TYPE, videoGalleryDTO.mimeType);
                     videoViewIntent.putExtra(IntentConstants.VIDEO_FILE_PATH, videoGalleryDTO.filePath);
                     context.startActivity(videoViewIntent);
                 }
