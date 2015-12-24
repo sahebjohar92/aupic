@@ -15,6 +15,7 @@ import com.aupic.aupic.Activity.gallery.GalleryAlbumActivity;
 import com.aupic.aupic.Constant.IntentConstants;
 import com.aupic.aupic.Event.AppBus;
 import com.aupic.aupic.Activity.gallery.GalleryVideoActivity;
+import com.aupic.aupic.Helper.ImageCacheHelper;
 import com.aupic.aupic.Holder.Gallery.VideoGalleryListDTO;
 import com.aupic.aupic.Task.AupicGallery.GetAupicGalleryTask;
 import com.squareup.otto.Subscribe;
@@ -60,6 +61,8 @@ public class MainActivity extends AupFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppBus.getInstance().register(this);
+
+        ImageCacheHelper.init(this);
 
         new GetAupicGalleryTask().execute(this);
 
@@ -131,6 +134,15 @@ public class MainActivity extends AupFragmentActivity {
             }
         });
 
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageCacheHelper.getInstance().clearCache();
+
+        AppBus.getInstance().unregister(this);
 
     }
 }

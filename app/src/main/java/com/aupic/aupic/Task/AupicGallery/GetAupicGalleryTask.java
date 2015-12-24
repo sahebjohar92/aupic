@@ -2,11 +2,14 @@ package com.aupic.aupic.Task.AupicGallery;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 
 import com.aupic.aupic.Constant.StringConstants;
 import com.aupic.aupic.Event.AppBus;
+import com.aupic.aupic.Helper.ImageCacheHelper;
 import com.aupic.aupic.Holder.Gallery.VideoGalleryDTO;
 import com.aupic.aupic.Holder.Gallery.VideoGalleryListDTO;
 
@@ -45,9 +48,6 @@ public class GetAupicGalleryTask extends AsyncTask<Object, String, VideoGalleryL
 
         Cursor cursor;
 
-        String[] thumbColumns = { MediaStore.Video.Thumbnails.DATA,
-                MediaStore.Video.Thumbnails.VIDEO_ID };
-
         String[] mediaColumns = { MediaStore.Video.Media._ID,
                 MediaStore.Video.Media.DATA, MediaStore.Video.Media.TITLE,
                 MediaStore.Video.Media.MIME_TYPE };
@@ -62,18 +62,6 @@ public class GetAupicGalleryTask extends AsyncTask<Object, String, VideoGalleryL
             do {
 
                 VideoGalleryDTO newVVI = new VideoGalleryDTO();
-                int id = cursor.getInt(cursor
-                                      .getColumnIndex(MediaStore.Video.Media._ID));
-
-                Cursor thumbCursor = context.getContentResolver().query(
-                        MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI,
-                        thumbColumns, MediaStore.Video.Thumbnails.VIDEO_ID
-                                + "=" + id, null, null);
-
-                if (thumbCursor.moveToFirst()) {
-                    newVVI.thumbPath = thumbCursor.getString(thumbCursor
-                                       .getColumnIndex(MediaStore.Video.Thumbnails.DATA));
-                }
 
                 newVVI.filePath = cursor.getString(cursor
                                  .getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
@@ -84,10 +72,24 @@ public class GetAupicGalleryTask extends AsyncTask<Object, String, VideoGalleryL
                 newVVI.mimeType = cursor.getString(cursor
                         .getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE));
 
+                getVideoThumbNail(newVVI.filePath);
+
                 videoGalleryDTOList.add(newVVI);
             } while (cursor.moveToNext());
         }
 
         return videoGalleryDTOList;
+    }
+
+    private void getVideoThumbNail(String fileName) {
+
+        Bitmap image;
+        boolean isInCache;
+        isInCache = ImageCacheHelper.getInstance().hasImage(fileName);
+
+        if (!isInCache) {
+            image = ThumbnailUtils.createVideoThumbnail(fileName, MediaStore.Video.Thumbnails.MINI_KIND);
+            ImageCacheHelper.getInstance().addToCache(fileName, image);
+        }
     }
 }

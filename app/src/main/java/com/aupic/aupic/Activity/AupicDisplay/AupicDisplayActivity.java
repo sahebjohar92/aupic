@@ -142,6 +142,8 @@ public class AupicDisplayActivity extends AupFragmentActivity {
 
     private void shareAupic() {
 
+        myVideoView.pause();
+
         final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         View convertView = mInflater.inflate(R.layout.share_aupic_list, null);

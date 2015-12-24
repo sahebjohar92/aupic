@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.aupic.aupic.Activity.AupicDisplay.AupicDisplayActivity;
 import com.aupic.aupic.Constant.IntentConstants;
+import com.aupic.aupic.Helper.ImageCacheHelper;
 import com.aupic.aupic.R;
 
 import butterknife.ButterKnife;
@@ -67,6 +68,18 @@ public class GalleryVideoViewHolder {
 
     public Bitmap getVideoThumbNail(String fileName) {
 
-        return ThumbnailUtils.createVideoThumbnail(fileName, MediaStore.Video.Thumbnails.MINI_KIND);
+        Bitmap image;
+        boolean isInCache;
+        isInCache = ImageCacheHelper.getInstance().hasImage(fileName);
+
+        if (isInCache) {
+
+            image = ImageCacheHelper.getInstance().getBitmapFromDiskCache(fileName);
+        } else {
+            image = ThumbnailUtils.createVideoThumbnail(fileName, MediaStore.Video.Thumbnails.MINI_KIND);
+            ImageCacheHelper.getInstance().addToCache(fileName, image);
+        }
+
+        return image;
     }
 }
