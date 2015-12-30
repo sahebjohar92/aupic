@@ -40,4 +40,9 @@ public class TransientDataRepo {
             dataMap.remove(key);
         }
     }
+
+    public void clearAll() {
+
+        dataMap = new HashMap<>();
+    }
 }

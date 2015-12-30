@@ -47,6 +47,7 @@ import com.aupic.aupic.Holder.Media.RecordAudioViewHolder;
 import com.aupic.aupic.Holder.Media.SelectedImagesDTO;
 import com.aupic.aupic.MainActivity;
 import com.aupic.aupic.R;
+import com.aupic.aupic.Storage.TransientDataRepo;
 import com.aupic.aupic.Task.FFmpeg.AudioMixingTask;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -58,8 +59,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -73,7 +76,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                                                                          SeekBar.OnSeekBarChangeListener,
                                                                          MediaPlayer.OnCompletionListener {
 
-    private HashMap<String, Bitmap> selectedImagesMap = new HashMap<>();
+    private Set<String> selectedImagesList = new HashSet<>();
     SelectedImagesDTO selectedImagesDtoFirstImage;
     AupicSideBarImageAdaptor aupicSideBarImageAdaptor;
     private List<SelectedImagesDTO> selectedImagesDTOList;
@@ -144,11 +147,8 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
         ButterKnife.inject(this);
 
-        if (null != getIntent()) {
-
-            selectedImagesMap = (HashMap<String, Bitmap>) getIntent().
-                                 getSerializableExtra(IntentConstants.SELECTED_IMAGES_MAP);
-        }
+        selectedImagesList = (Set<String>) TransientDataRepo.getInstance().
+                                                            getData(StringConstants.SELECTED_IMAGES);
 
         initialize(null);
 
@@ -205,9 +205,6 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
             public void onClick(View v) {
 
                if (imageAudioMap.size() > 0) {
-//                   Intent intent = new Intent(context, AupicDisplayActivity.class);
-//                   intent.putExtra(IntentConstants.AUPIC_MAP, imageAudioMap);
-//                   startActivity(intent);
 
                    for (HashMap.Entry<String, MediaAudioDto> map: imageAudioMap.entrySet()){
 
@@ -300,16 +297,14 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
     private void deleteImage() {
 
-        if (selectedImagesMap.size() > 1) {
+        if (selectedImagesList.size() > 1) {
 
             String imagePathToBeRemoved = selectedImagesDtoFirstImage.getImagePath();
 
-            if ( null != selectedImagesMap.get(imagePathToBeRemoved)) {
+            selectedImagesList.remove(imagePathToBeRemoved);
+            imageAudioMap.remove(imagePathToBeRemoved);
+            initialize(null);
 
-                selectedImagesMap.remove(imagePathToBeRemoved);
-                imageAudioMap.remove(imagePathToBeRemoved);
-                initialize(null);
-            }
         } else {
             openMainActivity();
         }
@@ -319,7 +314,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
         hideDeleteAction();
 
-        if ( null != selectedImagesMap && selectedImagesMap.size() > 0) {
+        if ( null != selectedImagesList && selectedImagesList.size() > 0) {
 
             initializeSelectedImagesDTOList(selectedImageFromSideBar);
             Uri uri = Uri.fromFile(new File(selectedImagesDtoFirstImage.getImagePath()));
@@ -347,23 +342,17 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
         Integer count = 0;
         SelectedImagesDTO selectedImagesDTO;
-        HashMap<String, Bitmap> tempImagesMap = new HashMap<>();
         selectedImagesDTOList = new ArrayList<>();
 
-        for (HashMap.Entry<String, Bitmap> entry : selectedImagesMap.entrySet()) {
+        for (String imageUrl : selectedImagesList) {
 
-            if ((null != selectedImageFromSideBar && entry.getKey().equals(selectedImageFromSideBar))
+            if ((null != selectedImageFromSideBar && imageUrl.equals(selectedImageFromSideBar))
                   || (null == selectedImageFromSideBar && count == 0)) {
 
                 selectedImagesDtoFirstImage = new SelectedImagesDTO();
+                selectedImagesDtoFirstImage.setImagePath(imageUrl);
 
-                Bitmap image = getImageFromImagePath(entry.getKey(), false);
-                tempImagesMap.put(entry.getKey(), image);
-                selectedImagesDtoFirstImage.setImage(image);
-
-                selectedImagesDtoFirstImage.setImagePath(entry.getKey());
-
-                MediaAudioDto mediaAudioDto = imageAudioMap.get(entry.getKey());
+                MediaAudioDto mediaAudioDto = imageAudioMap.get(imageUrl);
                 if (null != mediaAudioDto) {
 
                     selectedImagesDtoFirstImage.setAudioPath(mediaAudioDto.getData());
@@ -374,18 +363,10 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
                 selectedImagesDTO = new SelectedImagesDTO();
 
-                if (null == entry.getValue()) {
+                selectedImagesDTO.setImage(null);
+                selectedImagesDTO.setImagePath(imageUrl);
 
-                    Bitmap image = getImageFromImagePath(entry.getKey(), false);
-                    tempImagesMap.put(entry.getKey(), image);
-                    selectedImagesDTO.setImage(image);
-                } else {
-                    tempImagesMap.put(entry.getKey(), entry.getValue());
-                    selectedImagesDTO.setImage(entry.getValue());
-                }
-                selectedImagesDTO.setImagePath(entry.getKey());
-
-                MediaAudioDto mediaAudioDto = imageAudioMap.get(entry.getKey());
+                MediaAudioDto mediaAudioDto = imageAudioMap.get(imageUrl);
                 if (null != mediaAudioDto) {
 
                     selectedImagesDTO.setAudioPath(mediaAudioDto.getData());
@@ -401,49 +382,6 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         selectedImagesDTO.setImagePath(null);
         selectedImagesDTOList.add(selectedImagesDTO);
 
-        selectedImagesMap = tempImagesMap;
-    }
-
-    private Bitmap getImageFromImagePath(String imagePath, boolean isFirstImage) {
-
-        Bitmap bitmap = null;
-        try {
-
-            File f = new File(imagePath);
-            if (f.exists()) {
-
-                Uri contentUri = Uri.fromFile(f);
-                InputStream image_stream = getContentResolver().openInputStream(contentUri);
-                bitmap = BitmapFactory.decodeStream(image_stream);
-
-                if (!isFirstImage) {
-                      bitmap = getResizeBitmap(bitmap, 125);
-                } else {
-                    bitmap = getResizeBitmap(bitmap, 400);
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return bitmap;
-    }
-
-    public Bitmap getResizeBitmap(Bitmap image, int maxSize) {
-
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float)width / (float) height;
-        if (bitmapRatio > 0) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
     @Override
@@ -595,10 +533,8 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
             if (null != data.getSerializableExtra(IntentConstants.SELECTED_IMAGES_MAP)) {
 
-                HashMap<String, Bitmap> receivedImagesMap = (HashMap<String, Bitmap>) data.
-                        getSerializableExtra(IntentConstants.SELECTED_IMAGES_MAP);
-
-                selectedImagesMap.putAll(receivedImagesMap);
+                selectedImagesList = (Set<String>) TransientDataRepo.getInstance()
+                                                    .getData(StringConstants.SELECTED_IMAGES);
                 mStartPlaying = true;
                 initialize(null);
             }

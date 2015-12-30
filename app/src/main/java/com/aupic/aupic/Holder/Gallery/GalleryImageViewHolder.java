@@ -16,8 +16,12 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -35,17 +39,17 @@ public class GalleryImageViewHolder  {
 
     public interface SelectedImagesMap {
 
-        public void getSelectedImagesMap(HashMap<String, Bitmap> selectedImagesMap);
+        public void getSelectedImagesMap(Set<String> selectedImagesList);
     }
 
     private SelectedImagesMap selectedImagesMapListener;
-    private HashMap<String, Bitmap> selectedImagesMap;
+    private Set<String> selectedImagesList = new HashSet<>();
 
-    public GalleryImageViewHolder(View view, HashMap<String, Bitmap> selectedImagesMap,
+    public GalleryImageViewHolder(View view, Set<String> selectedImagesList,
                                   SelectedImagesMap selectedImagesMapListener) {
 
         ButterKnife.inject(this, view);
-        this.selectedImagesMap         = selectedImagesMap;
+        this.selectedImagesList         = selectedImagesList;
         this.selectedImagesMapListener = selectedImagesMapListener;
     }
 
@@ -64,16 +68,16 @@ public class GalleryImageViewHolder  {
 
                 if ( thumbnailSelection[id]) {
 
-                    selectedImagesMap.remove(arrImagesPath[id]);
+                    selectedImagesList.remove(arrImagesPath[id]);
                     selectBox.setImageResource(R.drawable.ic_action_brands);
                     thumbnailSelection[id] = false;
                 } else {
-                    selectedImagesMap.put(arrImagesPath[id], null);
+                    selectedImagesList.add(arrImagesPath[id]);
                     selectBox.setImageResource(R.drawable.blue_tick);
                     thumbnailSelection[id] = true;
                 }
 
-                selectedImagesMapListener.getSelectedImagesMap(selectedImagesMap);
+                selectedImagesMapListener.getSelectedImagesMap(selectedImagesList);
             }
         });
 

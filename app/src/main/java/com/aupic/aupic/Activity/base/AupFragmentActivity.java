@@ -1,6 +1,9 @@
 package com.aupic.aupic.Activity.base;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -11,6 +14,10 @@ import android.widget.TextView;
 
 import com.aupic.aupic.Event.AppBus;
 import com.aupic.aupic.R;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import butterknife.ButterKnife;
 
@@ -74,6 +81,48 @@ public abstract class AupFragmentActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private Bitmap getImageFromImagePath(String imagePath, boolean isFirstImage) {
+
+        Bitmap bitmap = null;
+        try {
+
+            File f = new File(imagePath);
+            if (f.exists()) {
+
+                Uri contentUri = Uri.fromFile(f);
+                InputStream image_stream = getContentResolver().openInputStream(contentUri);
+                bitmap = BitmapFactory.decodeStream(image_stream);
+
+                if (!isFirstImage) {
+                    bitmap = getResizeBitmap(bitmap, 125);
+                } else {
+                    bitmap = getResizeBitmap(bitmap, 400);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return bitmap;
+    }
+
+    public Bitmap getResizeBitmap(Bitmap image, int maxSize) {
+
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 0) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 }
 

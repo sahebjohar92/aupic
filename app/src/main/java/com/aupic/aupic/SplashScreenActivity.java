@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
+import com.aupic.aupic.Helper.ImageCacheHelper;
+import com.aupic.aupic.Storage.TransientDataRepo;
+
 /**
- * Created by root on 19/10/15.
+ * Created by saheb on 19/10/15.
  */
 public class SplashScreenActivity extends Activity {
 
@@ -19,6 +22,9 @@ public class SplashScreenActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.starter);
+
+        TransientDataRepo.init();
+        ImageCacheHelper.init(this);
 
         Thread splashTread = new Thread() {
             @Override

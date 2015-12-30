@@ -20,9 +20,14 @@ import com.aupic.aupic.Constant.StringConstants;
 import com.aupic.aupic.Event.AppBus;
 import com.aupic.aupic.Holder.Gallery.GalleryImageViewHolder;
 import com.aupic.aupic.R;
+import com.aupic.aupic.Storage.TransientDataRepo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.datatype.Duration;
 
@@ -37,7 +42,7 @@ import butterknife.Optional;
 public class GalleryImagesActivity extends AupFragmentActivity implements GalleryImageViewHolder.SelectedImagesMap {
 
     private String albumName = StringConstants.DEFAULT_ALBUM_NAME;
-    private HashMap<String, Bitmap> selectedImagesMap = new HashMap<>();
+    private Set<String> selectedImagesList = new HashSet<>();
     private boolean newActivity = true;
 
     @InjectView(R.id.uploadDONE)
@@ -109,23 +114,35 @@ public class GalleryImagesActivity extends AupFragmentActivity implements Galler
         }
 
         galleryImageAdaptors = new GalleryImageAdaptors(this, count, thumbnailSelection,
-                                                        thumbNails, arrPath, selectedImagesMap, this);
+                                                        thumbNails, arrPath, selectedImagesList, this);
         phoneImageGrid.setAdapter(galleryImageAdaptors);
         imageCursor.close();
     }
 
     @Override
-    public void getSelectedImagesMap(HashMap<String, Bitmap> selectedImagesMap) {
+    @SuppressWarnings("unchecked")
+    public void getSelectedImagesMap(Set<String> selectedImagesList) {
 
-        this.selectedImagesMap = selectedImagesMap;
-        Log.d("Size of map", "" + selectedImagesMap.size());
+        this.selectedImagesList = selectedImagesList;
+
+        Set<String> getImagesListData = (Set<String>) TransientDataRepo.getInstance().
+                                                           getData(StringConstants.SELECTED_IMAGES);
+
+        if ( null != getImagesListData) {
+
+            getImagesListData.addAll(selectedImagesList);
+            this.selectedImagesList = getImagesListData;
+        }
+
+        TransientDataRepo.getInstance().putData(StringConstants.SELECTED_IMAGES,
+                                                this.selectedImagesList);
     }
 
     @Optional
     @OnClick(R.id.uploadDONE)
     public void setUploadButton() {
 
-        if (null == selectedImagesMap || selectedImagesMap.size() == 0) {
+        if (null == selectedImagesList || selectedImagesList.size() == 0) {
 
             Toast.makeText(this,StringConstants.UPLOAD_BUTTON_WARNING_NO_IMAGE_SELECTED ,
                             Toast.LENGTH_SHORT).show();
@@ -134,15 +151,12 @@ public class GalleryImagesActivity extends AupFragmentActivity implements Galler
             if (newActivity) {
 
                 Intent aupicCreatorIntent = new Intent(this, AupicCreatorActivity.class);
-                aupicCreatorIntent.putExtra(IntentConstants.SELECTED_IMAGES_MAP, selectedImagesMap);
                 startActivity(aupicCreatorIntent);
 
             } else {
 
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra(IntentConstants.SELECTED_IMAGES_MAP, selectedImagesMap);
                 setResult(Activity.RESULT_OK, resultIntent);
-
                 finish();
             }
         }
