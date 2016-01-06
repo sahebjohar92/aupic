@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.aupic.aupic.Activity.aupic.AupicCreatorActivity;
 import com.aupic.aupic.Constant.IntentConstants;
 import com.aupic.aupic.Constant.StringConstants;
+import com.aupic.aupic.Storage.TransientDataRepo;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,8 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by saheb on 21/10/15.
@@ -52,18 +55,18 @@ public class CameraActivityNew extends Activity {
 
             if (resultCode == RESULT_OK) {
                 galleryAddPic();
-                capturedImageMap.put(mCurrentPhotoPath, null);
 
                 if (newActivity) {
 
                     Intent aupicCreatorIntent = new Intent(this, AupicCreatorActivity.class);
-                    aupicCreatorIntent.putExtra(IntentConstants.SELECTED_IMAGES_MAP, capturedImageMap);
+                    addImageToTransientRepo();
                     startActivity(aupicCreatorIntent);
 
                 } else {
 
                     Intent resultIntent = new Intent();
-                    resultIntent.putExtra(IntentConstants.SELECTED_IMAGES_MAP, capturedImageMap);
+                    addImageToTransientRepo();
+                    resultIntent.putExtra(IntentConstants.SELECTED_IMAGES_MAP, true);
                     setResult(Activity.RESULT_OK, resultIntent);
 
                     finish();
@@ -149,6 +152,26 @@ public class CameraActivityNew extends Activity {
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addImageToTransientRepo() {
+
+        Set<String> imagesListData = (Set<String>) TransientDataRepo.getInstance().
+                getData(StringConstants.SELECTED_IMAGES);
+
+        if ( null != imagesListData) {
+
+            imagesListData.add(mCurrentPhotoPath);
+
+        } else {
+
+            imagesListData = new HashSet<>();
+            imagesListData.add(mCurrentPhotoPath);
+        }
+
+        TransientDataRepo.getInstance().putData(StringConstants.SELECTED_IMAGES,
+                imagesListData);
     }
 
 }

@@ -531,7 +531,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
             }
 
-            if (null != data.getSerializableExtra(IntentConstants.SELECTED_IMAGES_MAP)) {
+            if (data.getBooleanExtra(IntentConstants.SELECTED_IMAGES_MAP, false)) {
 
                 selectedImagesList = (Set<String>) TransientDataRepo.getInstance()
                                                     .getData(StringConstants.SELECTED_IMAGES);

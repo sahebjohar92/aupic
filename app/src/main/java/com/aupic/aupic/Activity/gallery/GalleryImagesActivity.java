@@ -156,6 +156,7 @@ public class GalleryImagesActivity extends AupFragmentActivity implements Galler
             } else {
 
                 Intent resultIntent = new Intent();
+                resultIntent.putExtra(IntentConstants.SELECTED_IMAGES_MAP, true);
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }

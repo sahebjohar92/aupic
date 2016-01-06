@@ -82,17 +82,14 @@ public class GalleryAlbumActivity extends AupFragmentActivity implements Gallery
 
         if (resultCode == Activity.RESULT_OK) {
 
-            if (null != data.getSerializableExtra(IntentConstants.SELECTED_IMAGES_MAP)) {
+            boolean isResult = data.getBooleanExtra(IntentConstants.SELECTED_IMAGES_MAP, false);
 
-                HashMap<String, Bitmap> receivedImagesMap = (HashMap<String, Bitmap>) data.
-                        getSerializableExtra(IntentConstants.SELECTED_IMAGES_MAP);
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra(IntentConstants.SELECTED_IMAGES_MAP, isResult);
+            setResult(Activity.RESULT_OK, resultIntent);
 
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra(IntentConstants.SELECTED_IMAGES_MAP, receivedImagesMap);
-                setResult(Activity.RESULT_OK, resultIntent);
+            finish();
 
-                finish();
-            }
         }
     }
 
