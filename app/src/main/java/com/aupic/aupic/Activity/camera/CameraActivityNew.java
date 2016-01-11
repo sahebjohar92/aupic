@@ -31,7 +31,7 @@ import java.util.Set;
 /**
  * Created by saheb on 21/10/15.
  */
-public class CameraActivityNew extends AupFragmentActivity {
+public class CameraActivityNew extends Activity {
 
     private HashMap<String, Bitmap> capturedImageMap = new HashMap<>();
     String mCurrentPhotoPath;
@@ -50,18 +50,6 @@ public class CameraActivityNew extends AupFragmentActivity {
         }
 
         dispatchTakePictureIntent();
-    }
-
-    @Override
-    protected int getTitleText() {
-
-        return 0;
-    }
-
-    @Override
-    protected int getContentViewId() {
-
-        return 0;
     }
 
     @Override
@@ -189,6 +177,24 @@ public class CameraActivityNew extends AupFragmentActivity {
         incrementCount();
         TransientDataRepo.getInstance().putData(StringConstants.SELECTED_IMAGES,
                                                 getImagesListData);
+    }
+
+    public Integer getCount() {
+
+        Integer count = (Integer) TransientDataRepo.getInstance().
+                getData(StringConstants.SELECTED_IMAGE_COUNT);
+
+        if ( null == count) {
+            count = 0;
+        }
+
+        return count;
+    }
+
+    public void incrementCount() {
+
+        Integer count = getCount();
+        TransientDataRepo.getInstance().putData(StringConstants.SELECTED_IMAGE_COUNT, ++count);
     }
 
 }
