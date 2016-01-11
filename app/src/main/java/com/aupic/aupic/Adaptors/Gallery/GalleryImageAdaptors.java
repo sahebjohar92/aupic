@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.aupic.aupic.Activity.gallery.GalleryImagesActivity;
 import com.aupic.aupic.Holder.Gallery.GalleryImageViewHolder;
 import com.aupic.aupic.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,21 +30,24 @@ public class GalleryImageAdaptors extends BaseAdapter {
     boolean[] thumbnailSelection;
     Bitmap[] thumbNails;
     String[] arrImagesPath;
-    private Set<String> selectedImagesList = new HashSet<>();
+    private LinkedHashMap<String, Integer> selectedImagesList = new LinkedHashMap<>();
     GalleryImageViewHolder.SelectedImagesMap selectedImagesMapListener;
+    GalleryImagesActivity galleryImagesActivity;
 
     public GalleryImageAdaptors(Context context, int count, boolean[] thumbnailSelection,
                                 Bitmap[] thumbNails, String[] arrImagesPath,
-                                Set<String> selectedImagesList,
-                                GalleryImageViewHolder.SelectedImagesMap listener) {
+                                LinkedHashMap<String, Integer> selectedImagesList,
+                                GalleryImageViewHolder.SelectedImagesMap listener,
+                                GalleryImagesActivity galleryImagesActivity) {
 
         this.context                   = context;
         this.count                     = count;
         this.thumbNails                = thumbNails;
         this.thumbnailSelection        = thumbnailSelection;
         this.arrImagesPath             = arrImagesPath;
-        this.selectedImagesList         = selectedImagesList;
+        this.selectedImagesList        = selectedImagesList;
         this.selectedImagesMapListener = listener;
+        this.galleryImagesActivity     = galleryImagesActivity;
     }
 
     public int getCount() {
@@ -76,7 +81,7 @@ public class GalleryImageAdaptors extends BaseAdapter {
         }
 
         galleryImageViewHolder.render(context, position, thumbnailSelection, thumbNails,
-                                      arrImagesPath);
+                                      arrImagesPath, galleryImagesActivity);
 
         return convertView;
     }

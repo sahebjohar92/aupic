@@ -12,12 +12,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.aupic.aupic.Constant.StringConstants;
 import com.aupic.aupic.Event.AppBus;
 import com.aupic.aupic.R;
+import com.aupic.aupic.Storage.TransientDataRepo;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 
@@ -123,6 +133,86 @@ public abstract class AupFragmentActivity extends ActionBarActivity {
             width = (int) (height * bitmapRatio);
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
+    public Integer getCount() {
+
+        Integer count = (Integer) TransientDataRepo.getInstance().
+                                            getData(StringConstants.SELECTED_IMAGE_COUNT);
+
+        if ( null == count) {
+            count = 0;
+        }
+
+        return count;
+    }
+
+    public void incrementCount() {
+
+        Integer count = getCount();
+        TransientDataRepo.getInstance().putData(StringConstants.SELECTED_IMAGE_COUNT, ++count);
+    }
+
+    public void decrementCount() {
+
+        Integer count = getCount();
+        TransientDataRepo.getInstance().putData(StringConstants.SELECTED_IMAGE_COUNT, --count);
+    }
+
+    @SuppressWarnings("unchecked")
+    public  LinkedHashMap<String, Integer> removeImage(String imageName, LinkedHashMap<String, Integer> imageMap) {
+
+        LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
+
+        boolean isFound = false;
+
+        for (Map.Entry<String, Integer> entry : imageMap.entrySet()) {
+
+            if (entry.getKey().equals(imageName)) {
+
+                isFound = true;
+            } else {
+
+                if (isFound) {
+                    tempMap.put(entry.getKey(), entry.getValue() - 1);
+                } else {
+                    tempMap.put(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        imageMap = null;
+        decrementCount();
+
+        TransientDataRepo.getInstance()
+                .putData(StringConstants.SELECTED_IMAGES, tempMap);
+
+        return tempMap;
+    }
+
+    public Map<String, Integer> sortImagesMap(Map<String, Integer> imageMap) {
+
+        Set<Map.Entry<String, Integer>> set = imageMap.entrySet();
+        List<Map.Entry<String, Integer>> list = new ArrayList<>(set);
+
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+
+        imageMap.clear();
+
+        for(int i = 0;i < list.size(); i++) {
+
+            Map.Entry<String, Integer> entry = list.get(i);
+
+            imageMap.put(entry.getKey(), entry.getValue());
+        }
+
+        TransientDataRepo.getInstance()
+                .putData(StringConstants.SELECTED_IMAGES, imageMap);
+
+        return imageMap;
     }
 }
 

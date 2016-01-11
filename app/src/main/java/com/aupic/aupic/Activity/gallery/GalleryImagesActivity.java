@@ -25,6 +25,7 @@ import com.aupic.aupic.Storage.TransientDataRepo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +43,7 @@ import butterknife.Optional;
 public class GalleryImagesActivity extends AupFragmentActivity implements GalleryImageViewHolder.SelectedImagesMap {
 
     private String albumName = StringConstants.DEFAULT_ALBUM_NAME;
-    private Set<String> selectedImagesList = new HashSet<>();
+    private LinkedHashMap<String, Integer> selectedImagesList = new LinkedHashMap<>();
     private boolean newActivity = true;
 
     @InjectView(R.id.uploadDONE)
@@ -114,23 +115,24 @@ public class GalleryImagesActivity extends AupFragmentActivity implements Galler
         }
 
         galleryImageAdaptors = new GalleryImageAdaptors(this, count, thumbnailSelection,
-                                                        thumbNails, arrPath, selectedImagesList, this);
+                                                        thumbNails, arrPath, selectedImagesList, this,
+                                                        this);
         phoneImageGrid.setAdapter(galleryImageAdaptors);
         imageCursor.close();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void getSelectedImagesMap(Set<String> selectedImagesList) {
+    public void getSelectedImagesMap( LinkedHashMap<String, Integer> selectedImagesList) {
 
         this.selectedImagesList = selectedImagesList;
 
-        Set<String> getImagesListData = (Set<String>) TransientDataRepo.getInstance().
+        LinkedHashMap<String, Integer> getImagesListData = ( LinkedHashMap<String, Integer>) TransientDataRepo.getInstance().
                                                            getData(StringConstants.SELECTED_IMAGES);
 
         if ( null != getImagesListData) {
 
-            getImagesListData.addAll(selectedImagesList);
+            getImagesListData.putAll(selectedImagesList);
             this.selectedImagesList = getImagesListData;
         }
 

@@ -60,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -76,7 +77,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                                                                          SeekBar.OnSeekBarChangeListener,
                                                                          MediaPlayer.OnCompletionListener {
 
-    private Set<String> selectedImagesList = new HashSet<>();
+    private LinkedHashMap<String, Integer> selectedImagesList = new LinkedHashMap<>();
     SelectedImagesDTO selectedImagesDtoFirstImage;
     AupicSideBarImageAdaptor aupicSideBarImageAdaptor;
     private List<SelectedImagesDTO> selectedImagesDTOList;
@@ -147,7 +148,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
         ButterKnife.inject(this);
 
-        selectedImagesList = (Set<String>) TransientDataRepo.getInstance().
+        selectedImagesList = (LinkedHashMap<String, Integer>) TransientDataRepo.getInstance().
                                                             getData(StringConstants.SELECTED_IMAGES);
 
         initialize(null);
@@ -301,7 +302,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
             String imagePathToBeRemoved = selectedImagesDtoFirstImage.getImagePath();
 
-            selectedImagesList.remove(imagePathToBeRemoved);
+            selectedImagesList = removeImage(imagePathToBeRemoved, selectedImagesList);
             imageAudioMap.remove(imagePathToBeRemoved);
             initialize(null);
 
@@ -344,37 +345,41 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         SelectedImagesDTO selectedImagesDTO;
         selectedImagesDTOList = new ArrayList<>();
 
-        for (String imageUrl : selectedImagesList) {
+        for (Map.Entry<String, Integer> imageMap : selectedImagesList.entrySet()) {
 
-            if ((null != selectedImageFromSideBar && imageUrl.equals(selectedImageFromSideBar))
+            selectedImagesDTO = new SelectedImagesDTO();
+
+            selectedImagesDTO.setImage(null);
+            selectedImagesDTO.setImagePath(imageMap.getKey());
+
+            MediaAudioDto mediaAudioDto = imageAudioMap.get(imageMap.getKey());
+
+            if (null != mediaAudioDto) {
+
+                selectedImagesDTO.setAudioPath(mediaAudioDto.getData());
+                selectedImagesDTO.setAudioDuration(mediaAudioDto.getDuration());
+            }
+
+            if ((null != selectedImageFromSideBar && imageMap.getKey().equals(selectedImageFromSideBar))
                   || (null == selectedImageFromSideBar && count == 0)) {
 
                 selectedImagesDtoFirstImage = new SelectedImagesDTO();
-                selectedImagesDtoFirstImage.setImagePath(imageUrl);
+                selectedImagesDtoFirstImage.setImagePath(imageMap.getKey());
 
-                MediaAudioDto mediaAudioDto = imageAudioMap.get(imageUrl);
+
                 if (null != mediaAudioDto) {
 
                     selectedImagesDtoFirstImage.setAudioPath(mediaAudioDto.getData());
                     selectedImagesDtoFirstImage.setAudioDuration(mediaAudioDto.getDuration());
                 }
 
+                selectedImagesDTO.setIsSelected(true);
+
             } else {
-
-                selectedImagesDTO = new SelectedImagesDTO();
-
-                selectedImagesDTO.setImage(null);
-                selectedImagesDTO.setImagePath(imageUrl);
-
-                MediaAudioDto mediaAudioDto = imageAudioMap.get(imageUrl);
-                if (null != mediaAudioDto) {
-
-                    selectedImagesDTO.setAudioPath(mediaAudioDto.getData());
-                    selectedImagesDTO.setAudioDuration(mediaAudioDto.getDuration());
-                }
-
-                selectedImagesDTOList.add(selectedImagesDTO);
+                selectedImagesDTO.setIsSelected(false);
             }
+
+            selectedImagesDTOList.add(selectedImagesDTO);
             count++;
         }
 
@@ -533,7 +538,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
             if (data.getBooleanExtra(IntentConstants.SELECTED_IMAGES_MAP, false)) {
 
-                selectedImagesList = (Set<String>) TransientDataRepo.getInstance()
+                selectedImagesList = (LinkedHashMap<String, Integer>) TransientDataRepo.getInstance()
                                                     .getData(StringConstants.SELECTED_IMAGES);
                 mStartPlaying = true;
                 initialize(null);

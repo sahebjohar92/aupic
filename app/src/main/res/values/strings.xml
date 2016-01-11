@@ -30,6 +30,7 @@
     <string name="view_aupic">View Aupic</string>
     <string name="create_aupic">Create Aupic</string>
     <string name="aupic_video">My Aupic</string>
+    <string name="selected">Selected</string>
 
 
     <string name="start_marker">Start marker</string>

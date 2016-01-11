@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.aupic.aupic.Activity.gallery.GalleryImagesActivity;
 import com.aupic.aupic.R;
 import com.aupic.aupic.Task.ImageGallery.GetImagesTask;
 import com.squareup.picasso.Picasso;
@@ -19,6 +20,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,13 +41,13 @@ public class GalleryImageViewHolder  {
 
     public interface SelectedImagesMap {
 
-        public void getSelectedImagesMap(Set<String> selectedImagesList);
+        public void getSelectedImagesMap( LinkedHashMap<String, Integer> selectedImagesList);
     }
 
     private SelectedImagesMap selectedImagesMapListener;
-    private Set<String> selectedImagesList = new HashSet<>();
+    private LinkedHashMap<String, Integer> selectedImagesList = new LinkedHashMap<>();
 
-    public GalleryImageViewHolder(View view, Set<String> selectedImagesList,
+    public GalleryImageViewHolder(View view,  LinkedHashMap<String, Integer> selectedImagesList,
                                   SelectedImagesMap selectedImagesMapListener) {
 
         ButterKnife.inject(this, view);
@@ -53,8 +55,10 @@ public class GalleryImageViewHolder  {
         this.selectedImagesMapListener = selectedImagesMapListener;
     }
 
-    public void render(Context context, final int position, final boolean[] thumbnailSelection,
-                       final Bitmap[] thumbNails, final String[] arrImagesPath) {
+    public void render(final Context context, final int position, final boolean[] thumbnailSelection,
+                       final Bitmap[] thumbNails, final String[] arrImagesPath,
+                       final GalleryImagesActivity galleryImagesActivity) {
+
 
         thumbImage.setId(position);
         thumbImage.setTag(position);
@@ -66,13 +70,21 @@ public class GalleryImageViewHolder  {
 
                 int id = thumbImage.getId();
 
+                Integer count;
+
                 if ( thumbnailSelection[id]) {
 
-                    selectedImagesList.remove(arrImagesPath[id]);
+                    selectedImagesList = galleryImagesActivity.
+                                                removeImage(arrImagesPath[id], selectedImagesList);
+
                     selectBox.setImageResource(R.drawable.ic_action_brands);
                     thumbnailSelection[id] = false;
                 } else {
-                    selectedImagesList.add(arrImagesPath[id]);
+                    count = galleryImagesActivity.getCount();
+                    selectedImagesList.put(arrImagesPath[id], ++count);
+
+                    galleryImagesActivity.incrementCount();
+
                     selectBox.setImageResource(R.drawable.blue_tick);
                     thumbnailSelection[id] = true;
                 }

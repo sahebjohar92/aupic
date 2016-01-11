@@ -14,19 +14,25 @@
          />
 
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end">
+    <ImageView
+        android:layout_gravity="end"
+        android:id="@+id/select_box"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_action_brands"
+        android:scaleType="fitXY"
+        />
 
-        <ImageView
-            android:id="@+id/select_box"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_action_brands"
-            android:scaleType="fitXY"
-            />
-
-    </FrameLayout>
+    <TextView
+        android:id="@+id/selected_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/selected"
+        android:gravity="center"
+        android:textColor="@color/light_orange"
+        android:textStyle="bold"
+        android:textSize="@dimen/size_18"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
 </FrameLayout>

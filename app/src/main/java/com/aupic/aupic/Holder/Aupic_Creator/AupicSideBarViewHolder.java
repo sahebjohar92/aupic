@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.aupic.aupic.Holder.Media.RecordAudioViewHolder;
 import com.aupic.aupic.Holder.Media.SelectedImagesDTO;
@@ -33,6 +34,9 @@ public class AupicSideBarViewHolder {
 
     @InjectView(R.id.select_box)
     ImageView selectBox;
+
+    @InjectView(R.id.selected_text)
+    TextView selectedText;
 
     private SelectedSideBarImage selectedSideBarImageListener;
     private ChooseImagesViewHolder.ChooseImagesCallBack chooseImagesCallBack;
@@ -64,19 +68,28 @@ public class AupicSideBarViewHolder {
             selectBox.setVisibility(View.GONE);
 
             if (null != selectedImagesDTO.getAudioPath() && !selectedImagesDTO.getAudioPath()
-                    .isEmpty()) {
+                    .isEmpty() && !selectedImagesDTO.getIsSelected()) {
 
                 selectBox.setImageResource(R.drawable.green_tick);
                 selectBox.setVisibility(View.VISIBLE);
             }
 
-            thumbImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            if (!selectedImagesDTO.getIsSelected()) {
 
-                    selectedSideBarImageListener.getSelectedSideBarImage(selectedImagesDTO.getImagePath());
-                }
-            });
+                thumbImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        selectedSideBarImageListener.getSelectedSideBarImage(selectedImagesDTO.getImagePath());
+                    }
+                });
+            }
+
+            if (!selectedImagesDTO.getIsSelected()) {
+               selectedText.setVisibility(View.GONE);
+            } else {
+                selectedText.setVisibility(View.VISIBLE);
+            }
 
         } else {
 

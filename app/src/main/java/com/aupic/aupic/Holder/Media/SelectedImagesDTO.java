@@ -13,6 +13,7 @@ public class SelectedImagesDTO {
     private Bitmap image;
     private String audioPath;
     private Integer audioDuration;
+    private boolean isSelected;
 
     public String getImagePath() {
         return imagePath;
@@ -44,5 +45,13 @@ public class SelectedImagesDTO {
 
     public void setAudioDuration(Integer audioDuration) {
         this.audioDuration = audioDuration;
+    }
+
+    public boolean getIsSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
     }
 }

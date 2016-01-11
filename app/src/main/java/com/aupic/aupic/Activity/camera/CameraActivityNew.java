@@ -12,8 +12,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.aupic.aupic.Activity.aupic.AupicCreatorActivity;
+import com.aupic.aupic.Activity.base.AupFragmentActivity;
 import com.aupic.aupic.Constant.IntentConstants;
 import com.aupic.aupic.Constant.StringConstants;
+import com.aupic.aupic.R;
 import com.aupic.aupic.Storage.TransientDataRepo;
 
 import java.io.File;
@@ -23,12 +25,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 /**
  * Created by saheb on 21/10/15.
  */
-public class CameraActivityNew extends Activity {
+public class CameraActivityNew extends AupFragmentActivity {
 
     private HashMap<String, Bitmap> capturedImageMap = new HashMap<>();
     String mCurrentPhotoPath;
@@ -47,6 +50,18 @@ public class CameraActivityNew extends Activity {
         }
 
         dispatchTakePictureIntent();
+    }
+
+    @Override
+    protected int getTitleText() {
+
+        return 0;
+    }
+
+    @Override
+    protected int getContentViewId() {
+
+        return 0;
     }
 
     @Override
@@ -157,21 +172,23 @@ public class CameraActivityNew extends Activity {
     @SuppressWarnings("unchecked")
     private void addImageToTransientRepo() {
 
-        Set<String> imagesListData = (Set<String>) TransientDataRepo.getInstance().
-                getData(StringConstants.SELECTED_IMAGES);
+        LinkedHashMap<String, Integer> getImagesListData = ( LinkedHashMap<String, Integer>)
+                                                             TransientDataRepo.getInstance().
+                                                            getData(StringConstants.SELECTED_IMAGES);
 
-        if ( null != imagesListData) {
-
-            imagesListData.add(mCurrentPhotoPath);
+        if ( null != getImagesListData) {
+            Integer count = getCount();
+            getImagesListData.put(mCurrentPhotoPath, ++count);
 
         } else {
 
-            imagesListData = new HashSet<>();
-            imagesListData.add(mCurrentPhotoPath);
+            getImagesListData = new LinkedHashMap<>();
+            getImagesListData.put(mCurrentPhotoPath, 1);
         }
 
+        incrementCount();
         TransientDataRepo.getInstance().putData(StringConstants.SELECTED_IMAGES,
-                imagesListData);
+                                                getImagesListData);
     }
 
 }
