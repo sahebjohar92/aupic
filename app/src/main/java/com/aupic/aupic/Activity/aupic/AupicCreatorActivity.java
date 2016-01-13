@@ -5,13 +5,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,7 +23,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aupic.aupic.Activity.AupicDisplay.AupicDisplayActivity;
 import com.aupic.aupic.Activity.base.AupFragmentActivity;
 import com.aupic.aupic.Activity.camera.CameraActivityNew;
 import com.aupic.aupic.Activity.gallery.GalleryAlbumActivity;
@@ -35,6 +31,8 @@ import com.aupic.aupic.Activity.ringdroid.EditAudioFileActivity;
 import com.aupic.aupic.Adaptors.Aupic_Creator.AupicSideBarImageAdaptor;
 import com.aupic.aupic.Constant.IntentConstants;
 import com.aupic.aupic.Constant.StringConstants;
+import com.aupic.aupic.ImageDragHelper.ItemOnDragListener;
+import com.aupic.aupic.ImageDragHelper.LinearLayoutListView;
 import com.aupic.aupic.Event.AppBus;
 import com.aupic.aupic.Helper.GenerateFileNames;
 import com.aupic.aupic.Helper.GenerateVideo;
@@ -54,16 +52,11 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -75,7 +68,8 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                                                                          RecordAudioViewHolder.audioRecorderCallBack,
                                                                          ChooseImagesViewHolder.ChooseImagesCallBack,
                                                                          SeekBar.OnSeekBarChangeListener,
-                                                                         MediaPlayer.OnCompletionListener {
+                                                                         MediaPlayer.OnCompletionListener,
+                                                                         ItemOnDragListener.ImageOrderDrag{
 
     private LinkedHashMap<String, Integer> selectedImagesList = new LinkedHashMap<>();
     SelectedImagesDTO selectedImagesDtoFirstImage;
@@ -95,8 +89,12 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     private GenerateVideo generateVideo = new GenerateVideo();
     private Menu menuGlobal;
 
+
     @InjectView(R.id.selected_image)
     com.aupic.aupic.Graphics.SquareImageWithoutFade selectedFirstImageView;
+
+    @InjectView(R.id.ll_side_bar)
+    LinearLayoutListView ll_side_bar;
 
     @InjectView(R.id.side_bar_list_view)
     ListView sideBarListView;
@@ -143,10 +141,16 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     @Override
     @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
+
+        super.passChildContext(this);
         super.onCreate(savedInstanceState);
         AppBus.getInstance().register(this);
 
         ButterKnife.inject(this);
+
+        ll_side_bar.setListView(sideBarListView);
+        sideBarListView.setOnItemClickListener(listOnItemClickListener);
+        sideBarListView.setOnItemLongClickListener(myOnItemLongClickListener);
 
         selectedImagesList = (LinkedHashMap<String, Integer>) TransientDataRepo.getInstance().
                                                             getData(StringConstants.SELECTED_IMAGES);
@@ -224,6 +228,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                }
             }
         });
+
     }
 
     @Override
@@ -332,8 +337,10 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                 hideSeekBar();
             }
 
+
             aupicSideBarImageAdaptor = new AupicSideBarImageAdaptor(this, R.id.side_bar_list_view,
-                                                                    selectedImagesDTOList, this, this);
+                                                                    selectedImagesDTOList,this,
+                                                                    myOnDragListener, this);
 
             sideBarListView.setAdapter(aupicSideBarImageAdaptor);
         }
@@ -399,6 +406,13 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
         initialize(selectedSideBarImage);
 
+    }
+
+    @Override
+    public void imageOrderDragged(String selectedImagesPath) {
+
+        selectedImagesList = getImagesMap();
+        initialize(selectedImagesPath);
     }
 
     @Override

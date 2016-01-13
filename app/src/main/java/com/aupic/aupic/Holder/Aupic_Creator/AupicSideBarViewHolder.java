@@ -38,7 +38,6 @@ public class AupicSideBarViewHolder {
     @InjectView(R.id.selected_text)
     TextView selectedText;
 
-    private SelectedSideBarImage selectedSideBarImageListener;
     private ChooseImagesViewHolder.ChooseImagesCallBack chooseImagesCallBack;
 
     public interface SelectedSideBarImage {
@@ -46,11 +45,10 @@ public class AupicSideBarViewHolder {
         public void getSelectedSideBarImage(String selectedSideBarImage);
     }
 
-    public AupicSideBarViewHolder(View view, SelectedSideBarImage selectedSideBarImageListener,
+    public AupicSideBarViewHolder(View view,
                                   ChooseImagesViewHolder.ChooseImagesCallBack chooseImagesCallBack) {
 
         ButterKnife.inject(this, view);
-        this.selectedSideBarImageListener = selectedSideBarImageListener;
         this.chooseImagesCallBack = chooseImagesCallBack;
     }
 
@@ -75,17 +73,6 @@ public class AupicSideBarViewHolder {
             }
 
             if (!selectedImagesDTO.getIsSelected()) {
-
-                thumbImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        selectedSideBarImageListener.getSelectedSideBarImage(selectedImagesDTO.getImagePath());
-                    }
-                });
-            }
-
-            if (!selectedImagesDTO.getIsSelected()) {
                selectedText.setVisibility(View.GONE);
             } else {
                 selectedText.setVisibility(View.VISIBLE);
@@ -95,6 +82,7 @@ public class AupicSideBarViewHolder {
 
             thumbImage.setImageResource(R.drawable.add);
             selectBox.setVisibility(View.GONE);
+            selectedText.setVisibility(View.GONE);
 
             galleryImageLayout.setBackground(null);
             thumbImage.setOnClickListener(new View.OnClickListener() {
