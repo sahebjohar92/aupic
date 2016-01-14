@@ -412,7 +412,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     public void imageOrderDragged(String selectedImagesPath) {
 
         selectedImagesList = getImagesMap();
-        initialize(selectedImagesPath);
+        //initialize(selectedImagesPath);
     }
 
     @Override

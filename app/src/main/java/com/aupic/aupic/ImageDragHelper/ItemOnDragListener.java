@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.aupic.aupic.Adaptors.Aupic_Creator.AupicSideBarImageAdaptor;
@@ -35,21 +36,52 @@ public class ItemOnDragListener implements View.OnDragListener{
 
     @Override
     public boolean onDrag(View v, DragEvent event) {
+        PassObject passObj;
+        View view;
+        SelectedImagesDTO passedItem;
+        List<SelectedImagesDTO> srcList;
+        ListView oldParent;
+        Integer itemPos;
+
         switch (event.getAction()) {
             case DragEvent.ACTION_DRAG_STARTED:
                 break;
             case DragEvent.ACTION_DRAG_ENTERED:
                 v.setBackgroundColor(0x30000000);
+
+                passObj = (PassObject)event.getLocalState();
+                view = passObj.view;
+                oldParent = (ListView)view.getParent();
+
+                Integer visibleListHeight = oldParent.getHeight();
+                Integer itemHeight = v.getHeight();
+                Integer totalHeightListView = getTotalHeightOfListView(oldParent, itemHeight);
+                Float position = v.getY();
+
+                itemPos = position.intValue();
+
+                if (itemPos + itemHeight + 50  > visibleListHeight) {
+
+                    if (visibleListHeight < totalHeightListView) {
+
+                        oldParent.smoothScrollToPosition(oldParent.getAdapter().getCount());
+                    }
+                }
+
+                Log.v("Total Height of list view ", totalHeightListView.toString());
+                Log.v("View height", itemHeight.toString());
+                Log.v("Dragged to position ", position.toString());
+
                 break;
             case DragEvent.ACTION_DRAG_EXITED:
                 break;
             case DragEvent.ACTION_DROP:
 
-                PassObject passObj = (PassObject)event.getLocalState();
-                View view = passObj.view;
-                SelectedImagesDTO passedItem = passObj.item;
-                List<SelectedImagesDTO> srcList = passObj.srcList;
-                ListView oldParent = (ListView)view.getParent();
+                passObj = (PassObject)event.getLocalState();
+                view = passObj.view;
+                passedItem = passObj.item;
+                srcList = passObj.srcList;
+                oldParent = (ListView)view.getParent();
                 AupicSideBarImageAdaptor srcAdapter = (AupicSideBarImageAdaptor)(oldParent.getAdapter());
 
                 ListView newParent = (ListView)v.getParent();
@@ -105,6 +137,27 @@ public class ItemOnDragListener implements View.OnDragListener{
         }
 
         TransientDataRepo.getInstance().putData(StringConstants.SELECTED_IMAGES, imageMap);
+    }
+
+    public int getTotalHeightOfListView(ListView listView, int height) {
+
+        ListAdapter mAdapter = listView.getAdapter();
+
+        int totalHeight = 0;
+        int count = mAdapter.getCount();
+
+        for (int i = 0; i < count; i++) {
+
+            totalHeight += height;
+            Log.w("HEIGHT" + i, String.valueOf(totalHeight));
+
+        }
+
+        totalHeight = totalHeight
+                + (listView.getDividerHeight() * (mAdapter.getCount() - 1));
+
+        return totalHeight;
+
     }
 
 }
