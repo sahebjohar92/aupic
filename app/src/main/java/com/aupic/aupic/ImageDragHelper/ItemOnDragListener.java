@@ -93,7 +93,9 @@ public class ItemOnDragListener implements View.OnDragListener{
                 int removeLocation = srcList.indexOf(passedItem);
                 int insertLocation = destList.indexOf(selectedImagesDTO);
 
-                if(srcList != destList || removeLocation != insertLocation){
+                if(insertLocation != (destList.size() -1) &&
+                        (srcList != destList || removeLocation != insertLocation)){
+
                     if(removeItemToList(srcList, passedItem)){
                         destList.add(insertLocation, passedItem);
                     }

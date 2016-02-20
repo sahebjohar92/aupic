@@ -24,7 +24,6 @@ public class SplashScreenActivity extends Activity {
         setContentView(R.layout.starter);
 
         TransientDataRepo.init();
-        ImageCacheHelper.init(this);
 
         Thread splashTread = new Thread() {
             @Override

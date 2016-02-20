@@ -63,8 +63,7 @@ public class MainActivity extends AupFragmentActivity {
         super.onCreate(savedInstanceState);
         AppBus.getInstance().register(this);
 
-
-
+        ImageCacheHelper.init(this);
         new GetAupicGalleryTask().execute(this);
 
         initialize();
