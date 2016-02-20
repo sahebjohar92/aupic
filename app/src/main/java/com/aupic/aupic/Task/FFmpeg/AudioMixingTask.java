@@ -9,6 +9,7 @@ import android.os.PowerManager;
 import com.aupic.aupic.Constant.StringConstants;
 import com.aupic.aupic.Event.AppBus;
 import com.aupic.aupic.Helper.VideoKit;
+import com.aupic.aupic.Helper.VideoKitInvoke;
 import com.aupic.aupic.Holder.FFmpeg.AudioMixingHolder;
 import com.aupic.aupic.Holder.Media.MediaAudioDto;
 
@@ -60,7 +61,7 @@ public class AudioMixingTask extends AsyncTask<Object, String, Boolean> {
 
         try {
 
-           merged = VideoKit.getInstance().process(command);
+           merged = VideoKitInvoke.getInstance().process(command, context);
 
         } catch (Exception e) {
             e.printStackTrace();

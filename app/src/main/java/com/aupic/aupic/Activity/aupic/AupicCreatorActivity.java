@@ -217,7 +217,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                        String audio = map.getValue().getData();
                        String video = generateFileNames.getVideoFileName();
 
-                       generateVideo.createVideoFromImageAndAudio(image, audio , video);
+                       generateVideo.createVideoFromImageAndAudio(image, audio , video, context);
 
                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                        File f = new File(video);
@@ -343,7 +343,53 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                                                                     myOnDragListener, this);
 
             sideBarListView.setAdapter(aupicSideBarImageAdaptor);
+            scrollSideBarToSelectedPosition(selectedImageFromSideBar);
         }
+    }
+
+    private void scrollSideBarToSelectedPosition(String selectedImageFromSideBar) {
+
+        if ( null != selectedImageFromSideBar) {
+
+            final Map<String, Integer> visiblePositionMap = new HashMap<>();
+
+            final Integer position = getPositionFromImageName(selectedImageFromSideBar);
+            final Integer childCount = sideBarListView.getCount();
+
+            sideBarListView.post(new Runnable() {
+                public void run() {
+
+                visiblePositionMap.put(StringConstants.FIRST_VISIBLE_POS,
+                                        sideBarListView.getFirstVisiblePosition());
+
+                visiblePositionMap.put(StringConstants.LAST_VISIBLE_POS,
+                                        sideBarListView.getLastVisiblePosition());
+
+
+//                    if (visiblePositionMap.get(StringConstants.LAST_VISIBLE_POS).equals(
+//                                            visiblePositionMap.get(StringConstants.CHILD_COUNT) - 1)) {
+//
+//                        sideBarListView.setSelection(visiblePositionMap.get(StringConstants.POSITION));
+//                    }
+
+//                if (position - 1 > childCount - visiblePositionMap.get(StringConstants.LAST_VISIBLE_POS)) {
+//
+//                    sideBarListView.setSelection(position);
+//
+//                } else {
+//
+//                    if () {
+//
+//                    }
+//                }
+                  if ( position - 1 > visiblePositionMap.get(StringConstants.LAST_VISIBLE_POS)) {
+
+                      sideBarListView.setSelection(position - visiblePositionMap.get(StringConstants.LAST_VISIBLE_POS) + 1);
+                  }
+                }
+            });
+        }
+
     }
 
     private void initializeSelectedImagesDTOList(String selectedImageFromSideBar) {
@@ -403,7 +449,6 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         mStartPlaying = true;
 
         initializeMediaPlayerFromScratch();
-
         initialize(selectedSideBarImage);
 
     }
@@ -412,7 +457,6 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     public void imageOrderDragged(String selectedImagesPath) {
 
         selectedImagesList = getImagesMap();
-        //initialize(selectedImagesPath);
     }
 
     @Override

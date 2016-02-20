@@ -1,5 +1,6 @@
 package com.aupic.aupic.Helper;
 
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
@@ -14,7 +15,7 @@ public class GenerateVideo {
 
     private GenerateFileNames generateFileNames = new GenerateFileNames();
 
-    public void createVideoFromImageAndAudio(String imagePath, String audioPath, String videoFile) {
+    public void createVideoFromImageAndAudio(String imagePath, String audioPath, String videoFile, Context context) {
 
         //ffmpeg -y -loop 1 -i "+imagePath+" -i "+demoAudioPath+" -strict experimental -s 1270x720 -r 25 -aspect 16:9 -vcodec mpeg4 -vcodec mpeg4 -ab 48000 -ac 2 -b 2097152 -ar 22050 -shortest "+demoVideoPath
         //commandStr = "ffmpeg -y -i "+useVideoPath1+" -i "+useVideoPath2+" -strict experimental -filter_complex [0:0][0:1][1:0][1:1]concat=n=2:v=1:a=1 "+demoVideoPath;
@@ -25,6 +26,12 @@ public class GenerateVideo {
 //                "-strict","experimental","-r","25","-aspect","16:9",
 //                "-ab","48000","-ac","2","-b:v","1024000","-ar","22050","-vcodec","mpeg4",
 //                "-shortest",videoFile};
+
+
+                String[] command = {"ffmpeg","-y","-loop","1","-i",imagePath,"-i",audioPath,
+                "-strict","experimental","-r","25","-aspect","16:9",
+                "-ab","48000","-ac","2","-b:v","1024000","-ar","22050","-vcodec","mpeg4",
+                "-shortest",videoFile};
 
         File storageDir = Environment.getExternalStoragePublicDirectory(StringConstants.DIRECTORY +
                 StringConstants.AUDIO);
@@ -57,12 +64,12 @@ public class GenerateVideo {
 //                "-ab","48000","-ac","2","-ar","22050","-s","640x480","-r","25","-vcodec","mpeg4","-b:v","1024000",videoFile};
 
 
-        String[] command = {"ffmpeg","-i",file1,"-c","copy","-f","mpegts",file3};
+        //String[] command = {"ffmpeg","-i",file1,"-c","copy","-f","mpegts",file3};
         //String[] command = {"ffmpeg","-y","-i","concat:"+file4+"|"+file4,"-c","copy","-vcodec","copy",videoFile};
         //String[] command = {"ffmpeg","-y","-r","25","-i",file5,"-c:v","libx264","-c:a","libfaac","-r","25","-b:v","1024000",videoFile};
         try {
 
-            Boolean merged = VideoKit.getInstance().process(command);
+            Boolean merged = VideoKitInvoke.getInstance().process(command, context);
 
         } catch (Exception e) {
             e.printStackTrace();

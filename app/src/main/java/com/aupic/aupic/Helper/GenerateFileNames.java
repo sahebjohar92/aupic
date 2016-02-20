@@ -38,7 +38,7 @@ public class GenerateFileNames {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String audioFileName = "Video_" + timeStamp;
         File storageDir = Environment.getExternalStoragePublicDirectory(StringConstants.DIRECTORY +
-                StringConstants.AUDIO);
+                "/" +StringConstants.VIDEO);
 
         if (!storageDir.exists()) {
             if (!storageDir.mkdirs()) {

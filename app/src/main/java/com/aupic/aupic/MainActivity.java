@@ -103,7 +103,7 @@ public class MainActivity extends AupFragmentActivity {
             @Override
             public void onClick(View v) {
 
-                if (videoGallerySize == 0) {
+                if (null == videoGallerySize || videoGallerySize == 0) {
 
                     Toast.makeText(activity, "No Aupic available", Toast.LENGTH_LONG).show();
 
@@ -149,6 +149,10 @@ public class MainActivity extends AupFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        TransientDataRepo.getInstance().clearAll();
+        TransientDataRepo instance = TransientDataRepo.getInstance();
+
+        if (null != instance) {
+            instance.clearAll();
+        }
     }
 }

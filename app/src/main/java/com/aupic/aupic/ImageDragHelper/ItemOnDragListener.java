@@ -1,6 +1,5 @@
 package com.aupic.aupic.ImageDragHelper;
 
-import android.graphics.Color;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
@@ -53,24 +52,27 @@ public class ItemOnDragListener implements View.OnDragListener{
                 view = passObj.view;
                 oldParent = (ListView)view.getParent();
 
-                Integer visibleListHeight = oldParent.getHeight();
-                Integer itemHeight = v.getHeight();
-                Integer totalHeightListView = getTotalHeightOfListView(oldParent, itemHeight);
-                Float position = v.getY();
+                if ( null != oldParent) {
 
-                itemPos = position.intValue();
+                    Integer visibleListHeight = oldParent.getHeight();
+                    Integer itemHeight = v.getHeight();
+                    Integer totalHeightListView = getTotalHeightOfListView(oldParent, itemHeight);
+                    Float position = v.getY();
 
-                if (itemPos + itemHeight + 50  > visibleListHeight) {
+                    itemPos = position.intValue();
 
-                    if (visibleListHeight < totalHeightListView) {
+                    if (itemPos + itemHeight + 50 > visibleListHeight) {
 
-                        oldParent.smoothScrollToPosition(oldParent.getAdapter().getCount());
+                        if (visibleListHeight < totalHeightListView) {
+
+                            oldParent.smoothScrollToPosition(oldParent.getAdapter().getCount());
+                        }
                     }
-                }
 
-                Log.v("Total Height of list view ", totalHeightListView.toString());
-                Log.v("View height", itemHeight.toString());
-                Log.v("Dragged to position ", position.toString());
+                    Log.v("Total Height of list view ", totalHeightListView.toString());
+                    Log.v("View height", itemHeight.toString());
+                    Log.v("Dragged to position ", position.toString());
+                }
 
                 break;
             case DragEvent.ACTION_DRAG_EXITED:

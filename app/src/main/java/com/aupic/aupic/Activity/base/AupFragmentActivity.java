@@ -164,6 +164,8 @@ public abstract class AupFragmentActivity extends ActionBarActivity {
 
     public Integer getCount() {
 
+        checkTransientRepoInstance();
+
         Integer count = (Integer) TransientDataRepo.getInstance().
                                             getData(StringConstants.SELECTED_IMAGE_COUNT);
 
@@ -176,11 +178,15 @@ public abstract class AupFragmentActivity extends ActionBarActivity {
 
     public void incrementCount() {
 
+        checkTransientRepoInstance();
+
         Integer count = getCount();
         TransientDataRepo.getInstance().putData(StringConstants.SELECTED_IMAGE_COUNT, ++count);
     }
 
     public void decrementCount() {
+
+        checkTransientRepoInstance();
 
         Integer count = getCount();
         TransientDataRepo.getInstance().putData(StringConstants.SELECTED_IMAGE_COUNT, --count);
@@ -188,6 +194,8 @@ public abstract class AupFragmentActivity extends ActionBarActivity {
 
     @SuppressWarnings("unchecked")
     public  LinkedHashMap<String, Integer> removeImage(String imageName, LinkedHashMap<String, Integer> imageMap) {
+
+        checkTransientRepoInstance();
 
         LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
 
@@ -240,6 +248,31 @@ public abstract class AupFragmentActivity extends ActionBarActivity {
                 .putData(StringConstants.SELECTED_IMAGES, imageMap);
 
         return imageMap;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected Integer getPositionFromImageName(String selectedImageFromSideBar) {
+
+        checkTransientRepoInstance();
+
+        if ( null != selectedImageFromSideBar) {
+
+            LinkedHashMap<String, Integer> map = (LinkedHashMap<String, Integer>) TransientDataRepo
+                                             .getInstance().getData(StringConstants.SELECTED_IMAGES);
+
+            return map.get(selectedImageFromSideBar);
+        }
+        return 0;
+    }
+
+    private void checkTransientRepoInstance() {
+
+        TransientDataRepo instance = TransientDataRepo.getInstance();
+
+        if (null == instance) {
+
+            TransientDataRepo.init();
+        }
     }
 
     protected AdapterView.OnItemLongClickListener myOnItemLongClickListener = new AdapterView.OnItemLongClickListener(){

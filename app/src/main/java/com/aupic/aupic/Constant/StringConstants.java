@@ -23,6 +23,11 @@ public class StringConstants {
 
     public static final String SELECTED_IMAGE_COUNT = "selected_image_count";
 
+    public static final String FIRST_VISIBLE_POS    = "first_visible_position";
+    public static final String LAST_VISIBLE_POS     = "last_visible_position";
+    public static final String CHILD_COUNT          = "child_count";
+    public static final String POSITION             = "position";
+
     public static final String UPLOAD_BUTTON_WARNING_NO_IMAGE_SELECTED = "Please Select at least one " +
                                                                          "image to create your Aupic";
 
