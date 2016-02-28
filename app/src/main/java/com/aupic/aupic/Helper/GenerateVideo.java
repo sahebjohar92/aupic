@@ -27,20 +27,22 @@ public class GenerateVideo {
 //                "-ab","48000","-ac","2","-b:v","1024000","-ar","22050","-vcodec","mpeg4",
 //                "-shortest",videoFile};
 
-
+                // Working commnand
                 String[] command = {"ffmpeg","-y","-loop","1","-i",imagePath,"-i",audioPath,
                 "-strict","experimental","-r","25","-aspect","16:9",
                 "-ab","48000","-ac","2","-b:v","1024000","-ar","22050","-vcodec","mpeg4",
                 "-shortest",videoFile};
 
         File storageDir = Environment.getExternalStoragePublicDirectory(StringConstants.DIRECTORY +
-                StringConstants.AUDIO);
+                "/"+StringConstants.VIDEO);
 
-        String file1 = storageDir + "/Video_20151213_122806.mp4";
-        String file2 = storageDir + "/Video_20151213_123903.mp4";
+        String file1 = storageDir + "/Video_20160220_193639.mp4";
+        String file2 = storageDir + "/Video_20160220_131708.mp4";
         String file3 = generateFileNames.getVideoFileNameMpg();
-        String file4 = storageDir + "/Video_20151214_144252.ts";
-        String file5 = storageDir + "/Video_20151214_124136.mpg";
+        String file4 = storageDir + "/Video_20160221_121820.ts";
+        String file5 = storageDir + "/Video_20160221_121957.ts";
+        String file6 = storageDir + "/Video_20160221_131647.mpg";
+        String file7 = storageDir + "/Video_20160221_135354.ts";
 
 
 
@@ -50,12 +52,25 @@ public class GenerateVideo {
 //                "-shortest",videoFile};
 
 
-//        String[] command = {"ffmpeg","-y","-i","concat:"+file2+"|"+file2,"-r","25","-aspect","16:9",
-//                            "-b:v","2097152","-vcodec","mpeg4","-shortest",videoFile};
+        String[] command2 = {"ffmpeg","-y","-i","concat:"+file2+"|"+file2,"-r","25","-aspect","16:9",
+                            "-b:v","1024000","-vcodec","mpeg4","-shortest",videoFile};
 
-//        String[] command = {"ffmpeg","-i",file1,"-i",file2,"-filter_complex","[0:0][0:1][1:0][1:1]concat=n=2:v=1:a=1 [v] [a]",
-//                            "-map","[v]","-map","[a]","-vcodec","mpeg4",videoFile};
+        //String[] command1 = {"ffmpeg","-i","concat:"+file1+"|"+file2,"-codec","copy",videoFile};
 
+        String[] command1 = {"ffmpeg","-i",file1,"-i",file1,
+        "-filter_complex","concat=n=2:v=1:a=1 "
+        ,videoFile};
+
+        String[] command3 = {"ffmpeg","-i","concat:"+file4+"|"+file5,"-c","copy","-bsf:a","aac_adtstoasc",videoFile};
+
+        String[] command4 = {"ffmpeg","-i",file1,"-c","copy","-bsf:v","h264_mp4toannexb","-f","mpegts",file3};
+
+
+        String[] command5 = {"ffmpeg","-i",file1,"-i",file1,"-filter_complex",
+        "[0:0] [0:1] [1:0] [1:1] concat=n=2:v=1:a=1 [v] [a]",
+                "-map", "[v]", "-map", "[a]","-r","25","-aspect","16:9",
+        "-ab","48000","-ac","2","-b:v","1024000","-ar","22050","-vcodec","mpeg4",
+                "-shortest",videoFile};
 
 //        String[] command = {"ffmpeg","-y","-i",file1,
 //                "-i",file2,
@@ -65,11 +80,22 @@ public class GenerateVideo {
 
 
         //String[] command = {"ffmpeg","-i",file1,"-c","copy","-f","mpegts",file3};
-        //String[] command = {"ffmpeg","-y","-i","concat:"+file4+"|"+file4,"-c","copy","-vcodec","copy",videoFile};
+        String[] command6 = {"ffmpeg","-y","-i","concat:"+file1+"|"+file1,"-c","copy","-vcodec","copy",videoFile};
+        String[] command7 = {"ffmpeg","-i",file1,file3};
+        String[] command8 = {"cat",file6,file6,"|","ffmpeg","-f","mpeg","-i","-","-vcodec","mpeg4",videoFile};
         //String[] command = {"ffmpeg","-y","-r","25","-i",file5,"-c:v","libx264","-c:a","libfaac","-r","25","-b:v","1024000",videoFile};
+
+        String[] command9 = {"ffmpeg","-i",file7,"-vcodec","copy","-acodec","copy",file3};
+
+        String[] command10 = {"ffmpeg","-i","concat:"+file7+"|"+file7,"-c","copy",videoFile};
+
+
         try {
 
             Boolean merged = VideoKitInvoke.getInstance().process(command, context);
+//            String file6 = storageDir + "/vid.ts";
+//            String[] command5 = {"ffmpeg","-i",file2,"-c","copy","-bsf:v","h264_mp4toannexb","-f","mpegts",file6};
+//            Boolean merged1 = VideoKitInvoke.getInstance().process(command5, context);
 
         } catch (Exception e) {
             e.printStackTrace();

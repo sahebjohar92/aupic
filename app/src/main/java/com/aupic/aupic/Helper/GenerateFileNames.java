@@ -55,8 +55,8 @@ public class GenerateFileNames {
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String audioFileName = "Video_" + timeStamp;
-        File storageDir = Environment.getExternalStoragePublicDirectory(StringConstants.DIRECTORY +
-                StringConstants.AUDIO);
+        File storageDir = Environment.getExternalStoragePublicDirectory(StringConstants.DIRECTORY + "/" +
+                StringConstants.VIDEO);
 
         if (!storageDir.exists()) {
             if (!storageDir.mkdirs()) {
@@ -66,6 +66,6 @@ public class GenerateFileNames {
             }
         }
 
-        return storageDir + "/" + audioFileName + ".ts";
+        return storageDir + "/" + audioFileName + ".mpg";
     }
 }

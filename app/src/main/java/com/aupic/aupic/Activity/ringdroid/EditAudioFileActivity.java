@@ -395,6 +395,7 @@ public class EditAudioFileActivity extends AupFragmentActivity implements Marker
         if (marker == mStartMarker) {
             mStartPos = trap((int)(mTouchInitialStartPos + delta));
             mEndPos = trap((int)(mTouchInitialEndPos + delta));
+            mEndPos = trap((int)(mTouchInitialEndPos));
         } else {
             mEndPos = trap((int)(mTouchInitialEndPos + delta));
             if (mEndPos < mStartPos)
