@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aupic.aupic.Holder.Media.RecordAudioViewHolder;
@@ -38,6 +39,9 @@ public class AupicSideBarViewHolder {
     @InjectView(R.id.selected_text)
     TextView selectedText;
 
+    @InjectView(R.id.progressBar)
+    ProgressBar loader;
+
     private ChooseImagesViewHolder.ChooseImagesCallBack chooseImagesCallBack;
 
     public interface SelectedSideBarImage {
@@ -64,17 +68,30 @@ public class AupicSideBarViewHolder {
                     .into(thumbImage);
 
             selectBox.setVisibility(View.GONE);
+            loader.setVisibility(View.GONE);
 
             if (null != selectedImagesDTO.getAudioPath() && !selectedImagesDTO.getAudioPath()
                     .isEmpty() && !selectedImagesDTO.getIsSelected()) {
 
-                selectBox.setImageResource(R.drawable.green_tick);
                 selectBox.setVisibility(View.VISIBLE);
+
+                if (null != selectedImagesDTO.getVideoProgressDone() && selectedImagesDTO.
+                                                                        getVideoProgressDone()) {
+                    selectBox.setImageResource(R.drawable.green_tick);
+                } else {
+
+                    if (null != selectedImagesDTO.getVideoInProgress() && selectedImagesDTO.
+                                                                          getVideoInProgress()) {
+                        loader.setVisibility(View.VISIBLE);
+                    }
+                    selectBox.setImageResource(R.drawable.red_tick);
+                }
             }
 
             if (!selectedImagesDTO.getIsSelected()) {
                selectedText.setVisibility(View.GONE);
             } else {
+                loader.setVisibility(View.GONE);
                 selectedText.setVisibility(View.VISIBLE);
             }
 

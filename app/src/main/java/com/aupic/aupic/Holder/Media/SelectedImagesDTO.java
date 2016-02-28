@@ -14,6 +14,9 @@ public class SelectedImagesDTO {
     private String audioPath;
     private Integer audioDuration;
     private boolean isSelected;
+    private Boolean videoInProgress;
+    private Boolean videoProgressDone;
+    private String videoPath;
 
     public String getImagePath() {
         return imagePath;
@@ -53,5 +56,37 @@ public class SelectedImagesDTO {
 
     public void setIsSelected(boolean isSelected) {
         this.isSelected = isSelected;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    public String getVideoPath() {
+        return videoPath;
+    }
+
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
+    }
+
+    public Boolean getVideoInProgress() {
+        return videoInProgress;
+    }
+
+    public void setVideoInProgress(Boolean videoInProgress) {
+        this.videoInProgress = videoInProgress;
+    }
+
+    public Boolean getVideoProgressDone() {
+        return videoProgressDone;
+    }
+
+    public void setVideoProgressDone(Boolean videoProgressDone) {
+        this.videoProgressDone = videoProgressDone;
     }
 }

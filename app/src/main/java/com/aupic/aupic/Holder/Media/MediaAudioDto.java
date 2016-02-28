@@ -13,6 +13,9 @@ public class MediaAudioDto implements Serializable{
     private String data;
     private String displayName;
     private Integer duration;
+    private boolean isInVidProgress;
+    private String videoPath;
+    private boolean vidProgressDone = false;
 
     public int getAudioId() {
         return audioId;
@@ -60,5 +63,29 @@ public class MediaAudioDto implements Serializable{
 
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    public boolean getIsInVidProgress() {
+        return isInVidProgress;
+    }
+
+    public void setInVidProgress(boolean isInVidProgress) {
+        this.isInVidProgress = isInVidProgress;
+    }
+
+    public String getVideoPath() {
+        return videoPath;
+    }
+
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
+    }
+
+    public boolean getIsVidProgressDone() {
+        return vidProgressDone;
+    }
+
+    public void setVidProgressDone(boolean vidProgressDone) {
+        this.vidProgressDone = vidProgressDone;
     }
 }

@@ -31,6 +31,7 @@ import com.aupic.aupic.Activity.ringdroid.EditAudioFileActivity;
 import com.aupic.aupic.Adaptors.Aupic_Creator.AupicSideBarImageAdaptor;
 import com.aupic.aupic.Constant.IntentConstants;
 import com.aupic.aupic.Constant.StringConstants;
+import com.aupic.aupic.Holder.FFmpeg.ImageVideoHolder;
 import com.aupic.aupic.ImageDragHelper.ItemOnDragListener;
 import com.aupic.aupic.ImageDragHelper.LinearLayoutListView;
 import com.aupic.aupic.Event.AppBus;
@@ -47,6 +48,7 @@ import com.aupic.aupic.MainActivity;
 import com.aupic.aupic.R;
 import com.aupic.aupic.Storage.TransientDataRepo;
 import com.aupic.aupic.Task.FFmpeg.AudioMixingTask;
+import com.aupic.aupic.Task.FFmpeg.MergeSingleAudioVideo;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -86,7 +88,6 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     private SeekBarHelper utils = new SeekBarHelper();
     private GenerateFileNames generateFileNames = new GenerateFileNames();
     private long songDuration;
-    private GenerateVideo generateVideo = new GenerateVideo();
     private Menu menuGlobal;
 
 
@@ -208,6 +209,16 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         doneCreateAupic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(context, "Image and audio merge started", Toast.LENGTH_SHORT)
+                               .show();
+                makeSingleImageAudioVideoInBackground();
+            }
+        });
+
+        /* changing purpose of this button
+        doneCreateAupic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
                if (imageAudioMap.size() > 0) {
 
@@ -227,7 +238,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                    }
                }
             }
-        });
+        });*/
 
     }
 
@@ -278,6 +289,68 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
         } else {
 
             Toast.makeText(this, "Unable to merge File, previous audio kept", Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
+
+    @Subscribe
+    public void onAsyncTaskResult(ImageVideoHolder imageVideoHolder) {
+
+        if (imageVideoHolder.getCreated()) {
+
+            addAudioToMediaScanner();
+
+            if (!imageVideoHolder.getImagePath().equals(selectedImagesDtoFirstImage.getImagePath())) {
+
+                MediaAudioDto mediaAudioDtoLocal = imageAudioMap.get(imageVideoHolder.
+                                                    getImagePath());
+
+                mediaAudioDtoLocal.setInVidProgress(false);
+                mediaAudioDtoLocal.setVidProgressDone(true);
+                mediaAudioDtoLocal.setVideoPath(imageVideoHolder.getVideoPath());
+
+                mediaScan(imageVideoHolder.getVideoPath());
+
+                imageAudioMap.put(imageVideoHolder.getImagePath(), mediaAudioDtoLocal);
+
+                renderSideBar(selectedImagesDtoFirstImage.getImagePath());
+            }
+
+        } else {
+
+            Toast.makeText(this, "Unable to create video. Please try again.", Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
+
+    private void renderSideBar(String imagePath) {
+
+        initializeSelectedImagesDTOList(imagePath);
+        aupicSideBarImageAdaptor = new AupicSideBarImageAdaptor(this, R.id.side_bar_list_view,
+                                                                    selectedImagesDTOList, this,
+                                                                    myOnDragListener, this);
+        sideBarListView.setAdapter(aupicSideBarImageAdaptor);
+    }
+
+    private void makeSingleImageAudioVideoInBackground() {
+
+        if (null != imageAudioMap.get(selectedImagesDtoFirstImage.
+                getImagePath()) && null!= imageAudioMap.get(selectedImagesDtoFirstImage.
+                getImagePath()).getData()) {
+
+            MediaAudioDto mediaAudioDtoLocal = imageAudioMap.get(selectedImagesDtoFirstImage.
+                                                                 getImagePath());
+
+            selectedImagesDtoFirstImage.setAudioPath(imageAudioMap.get(selectedImagesDtoFirstImage.
+                                                     getImagePath()).getData());
+
+            mediaAudioDtoLocal.setInVidProgress(true);
+            imageAudioMap.put(selectedImagesDtoFirstImage.getImagePath(), mediaAudioDtoLocal);
+
+            new MergeSingleAudioVideo(this).execute(selectedImagesDtoFirstImage.getImagePath(),
+                    selectedImagesDtoFirstImage.getAudioPath());
+        } else {
+            Toast.makeText(this, "Select An Audio File to Proceed", Toast.LENGTH_SHORT)
                     .show();
         }
     }
@@ -411,6 +484,9 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
                 selectedImagesDTO.setAudioPath(mediaAudioDto.getData());
                 selectedImagesDTO.setAudioDuration(mediaAudioDto.getDuration());
+                selectedImagesDTO.setVideoInProgress(mediaAudioDto.getIsInVidProgress());
+                selectedImagesDTO.setVideoProgressDone(mediaAudioDto.getIsVidProgressDone());
+                selectedImagesDTO.setVideoPath(mediaAudioDto.getVideoPath());
             }
 
             if ((null != selectedImageFromSideBar && imageMap.getKey().equals(selectedImageFromSideBar))
@@ -431,7 +507,6 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
             } else {
                 selectedImagesDTO.setIsSelected(false);
             }
-
             selectedImagesDTOList.add(selectedImagesDTO);
             count++;
         }

@@ -2,6 +2,7 @@ package com.aupic.aupic.Activity.base;
 
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -368,6 +369,15 @@ public abstract class AupFragmentActivity extends ActionBarActivity {
     private boolean addItemToList(List<SelectedImagesDTO> l, SelectedImagesDTO it){
         boolean result = l.add(it);
         return result;
+    }
+
+    protected void mediaScan(String filePath) {
+
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(filePath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 }
 

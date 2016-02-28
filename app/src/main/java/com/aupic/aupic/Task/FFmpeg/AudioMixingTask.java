@@ -65,6 +65,7 @@ public class AudioMixingTask extends AsyncTask<Object, String, Boolean> {
 
         } catch (Exception e) {
             e.printStackTrace();
+            merged = false;
         }
 
         return merged;

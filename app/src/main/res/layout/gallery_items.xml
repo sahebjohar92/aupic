@@ -33,6 +33,29 @@
         android:textStyle="bold"
         android:textSize="@dimen/size_18"
         android:visibility="gone"
+        tools:visibility="gone"/>
+
+    <!--<ImageView-->
+        <!--android:id="@+id/loader"-->
+        <!--android:layout_width="35dp"-->
+        <!--android:layout_height="35dp"-->
+        <!--android:src="@drawable/loading"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:visibility="gone"-->
+        <!--tools:visibility="visible"-->
+        <!--/>-->
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:indeterminate="true"
+        android:layout_gravity="center"
+        android:max="1000"
+        android:layout_margin="20dp"
+        style="@android:style/Widget.ProgressBar"
+        android:progress="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
         tools:visibility="visible"/>
 
 </FrameLayout>
