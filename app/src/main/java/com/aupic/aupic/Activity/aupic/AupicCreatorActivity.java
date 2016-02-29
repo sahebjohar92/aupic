@@ -321,15 +321,20 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
             MediaAudioDto mediaAudioDtoLocal = imageAudioMap.get(imageVideoHolder.
                                                 getImagePath());
 
-            mediaAudioDtoLocal.setInVidProgress(false);
-            mediaAudioDtoLocal.setVidProgressDone(true);
-            mediaAudioDtoLocal.setVideoPath(imageVideoHolder.getVideoPath());
+            Log.d("Aupic creator: size of image Audio map", imageAudioMap.size()+"");
 
-            mediaScan(imageVideoHolder.getVideoPath());
+            if (null != mediaAudioDtoLocal) {
 
-            imageAudioMap.put(imageVideoHolder.getImagePath(), mediaAudioDtoLocal);
+                mediaAudioDtoLocal.setInVidProgress(false);
+                mediaAudioDtoLocal.setVidProgressDone(true);
+                mediaAudioDtoLocal.setVideoPath(imageVideoHolder.getVideoPath());
 
-            initialize(selectedImagesDtoFirstImage.getImagePath());
+                mediaScan(imageVideoHolder.getVideoPath());
+
+                imageAudioMap.put(imageVideoHolder.getImagePath(), mediaAudioDtoLocal);
+
+                initialize(selectedImagesDtoFirstImage.getImagePath());
+            }
 
 
         } else {
