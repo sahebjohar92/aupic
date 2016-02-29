@@ -39,7 +39,7 @@ public class AupicSideBarViewHolder {
     @InjectView(R.id.selected_text)
     TextView selectedText;
 
-    @InjectView(R.id.progressBar)
+    @InjectView(R.id.progressSideBar)
     ProgressBar loader;
 
     private ChooseImagesViewHolder.ChooseImagesCallBack chooseImagesCallBack;

@@ -63,6 +63,19 @@
                     tools:visibility="visible"
                     android:visibility="gone"/>
 
+                <ProgressBar
+                    android:id="@+id/progressMainBar"
+                    android:indeterminate="true"
+                    android:layout_gravity="center"
+                    android:max="1000"
+                    android:layout_margin="20dp"
+                    style="@android:style/Widget.ProgressBar"
+                    android:progress="0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="gone"/>
+
             </FrameLayout>
 
             <VideoView
