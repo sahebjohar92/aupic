@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.aupic.aupic.Constant.StringConstants;
 import com.aupic.aupic.Holder.Media.RecordAudioViewHolder;
 import com.aupic.aupic.Holder.Media.SelectedImagesDTO;
 import com.aupic.aupic.R;
@@ -32,6 +34,9 @@ public class AupicSideBarViewHolder {
 
     @InjectView(R.id.thumbImage)
     com.aupic.aupic.Graphics.SquareImageWithoutFade thumbImage;
+
+    @InjectView(R.id.thumbImageBorder)
+    com.aupic.aupic.Graphics.SquareImageWithoutFade thumbImageBorder;
 
     @InjectView(R.id.select_box)
     ImageView selectBox;
@@ -61,11 +66,6 @@ public class AupicSideBarViewHolder {
         if ( null != selectedImagesDTO.getImagePath()) {
 
             Uri uri = Uri.fromFile(new File(selectedImagesDTO.getImagePath()));
-            Picasso.with(context)
-                    .load(uri)
-                    .placeholder(null)
-                    .resize(130, 150)
-                    .into(thumbImage);
 
             selectBox.setVisibility(View.GONE);
             loader.setVisibility(View.GONE);
@@ -90,9 +90,26 @@ public class AupicSideBarViewHolder {
 
             if (!selectedImagesDTO.getIsSelected()) {
                selectedText.setVisibility(View.GONE);
+
+                Picasso.with(context)
+                        .load(uri)
+                        .placeholder(null)
+                        .resize(StringConstants.DEFAULT_SIDE_VIEW_WIDTH,
+                                StringConstants.DEFAULT_SIDE_VIEW_HEIGHT)
+                        .into(thumbImage);
+
+                showNotSelectedImage();
             } else {
+
+                Picasso.with(context)
+                        .load(uri)
+                        .placeholder(null)
+                        .resize(StringConstants.DEFAULT_SIDE_VIEW_WIDTH,
+                                StringConstants.DEFAULT_SIDE_VIEW_HEIGHT)
+                        .into(thumbImageBorder);
+
                 loader.setVisibility(View.GONE);
-                selectedText.setVisibility(View.VISIBLE);
+                showSelectedImage();
             }
 
         } else {
@@ -127,5 +144,17 @@ public class AupicSideBarViewHolder {
 
         alertDialog.setView(convertView);
         alertDialog.show();
+    }
+
+    private void showSelectedImage() {
+
+        thumbImageBorder.setVisibility(View.VISIBLE);
+        thumbImage.setVisibility(View.GONE);
+        galleryImageLayout.setBackgroundResource(R.drawable.border_box_sky_blue);
+    }
+
+    private void showNotSelectedImage() {
+        thumbImageBorder.setVisibility(View.GONE);
+        thumbImage.setVisibility(View.VISIBLE);
     }
 }

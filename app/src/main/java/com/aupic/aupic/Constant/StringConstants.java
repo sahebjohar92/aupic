@@ -40,4 +40,7 @@ public class StringConstants {
     public static final int RESET_AND_PLAY          = 1;
     public static final int PLAY                    = 2;
     public static final int PAUSE                   = 3;
+
+    public static final int DEFAULT_SIDE_VIEW_HEIGHT  = 150;
+    public static final int DEFAULT_SIDE_VIEW_WIDTH   = 130;
 }
