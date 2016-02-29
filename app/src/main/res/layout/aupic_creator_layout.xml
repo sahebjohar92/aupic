@@ -41,13 +41,35 @@
             android:layout_weight="1"
             android:padding="@dimen/size_8">
 
-            <com.aupic.aupic.Graphics.SquareImageWithoutFade
-                android:id="@+id/selected_image"
+            <FrameLayout
+                android:id="@+id/main_image_flv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.aupic.aupic.Graphics.SquareImageWithoutFade
+                    android:id="@+id/selected_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/red_tick"
+                    />
+
+                <ImageView
+                    android:id="@+id/btn_play_video"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/play"
+                    android:layout_gravity="center"
+                    tools:visibility="visible"
+                    android:visibility="gone"/>
+
+            </FrameLayout>
+
+            <VideoView
+                android:id="@+id/vv_main_video"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/red_tick"
-                />
+                android:visibility="gone"/>
 
         </LinearLayout>
 

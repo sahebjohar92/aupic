@@ -16,12 +16,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.os.Handler;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.aupic.aupic.Activity.base.AupFragmentActivity;
 import com.aupic.aupic.Activity.camera.CameraActivityNew;
@@ -127,6 +129,15 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     @InjectView(R.id.done_create_aupic)
     ImageView doneCreateAupic;
 
+    @InjectView(R.id.btn_play_video)
+    ImageView btnPlayVideo;
+
+    @InjectView(R.id.vv_main_video)
+    VideoView mainVideoView;
+
+    @InjectView(R.id.main_image_flv)
+    FrameLayout mainImageFlv;
+
     @Override
     protected int getTitleText() {
 
@@ -212,6 +223,13 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                 Toast.makeText(context, "Image and audio merge started", Toast.LENGTH_SHORT)
                                .show();
                 makeSingleImageAudioVideoInBackground();
+            }
+        });
+
+        btnPlayVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showVideoView();
             }
         });
 
@@ -392,6 +410,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
     private void initialize(String selectedImageFromSideBar) {
 
         hideDeleteAction();
+        showImageView();
 
         if ( null != selectedImagesList && selectedImagesList.size() > 0) {
 
@@ -402,6 +421,15 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
                     .placeholder(null)
                     .resize(300, 375)
                     .into(selectedFirstImageView);
+
+            if (null != selectedImagesDtoFirstImage.getVideoPath() && !selectedImagesDtoFirstImage
+                                                                      .getVideoPath().isEmpty()) {
+
+                btnPlayVideo.setVisibility(View.VISIBLE);
+                llMediaPlayer.setVisibility(View.GONE);
+            } else {
+                btnPlayVideo.setVisibility(View.GONE);
+            }
 
             if ( null != selectedImagesDtoFirstImage.getAudioPath() && !selectedImagesDtoFirstImage
                                                                         .getAudioPath().isEmpty()) {
@@ -500,6 +528,9 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
                     selectedImagesDtoFirstImage.setAudioPath(mediaAudioDto.getData());
                     selectedImagesDtoFirstImage.setAudioDuration(mediaAudioDto.getDuration());
+                    selectedImagesDtoFirstImage.setVideoInProgress(mediaAudioDto.getIsInVidProgress());
+                    selectedImagesDtoFirstImage.setVideoProgressDone(mediaAudioDto.getIsVidProgressDone());
+                    selectedImagesDtoFirstImage.setVideoPath(mediaAudioDto.getVideoPath());
                 }
 
                 selectedImagesDTO.setIsSelected(true);
@@ -966,6 +997,20 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
             menuGlobal.findItem(R.id.action_delete).setVisible(false);
         }
+    }
+
+    private void showVideoView() {
+
+        mainImageFlv.setVisibility(View.GONE);
+        mainVideoView.setVisibility(View.VISIBLE);
+
+        initializeVideoPlayer(mainVideoView, selectedImagesDtoFirstImage.getVideoPath());
+    }
+
+    private void showImageView() {
+
+        mainImageFlv.setVisibility(View.VISIBLE);
+        mainVideoView.setVisibility(View.GONE);
     }
 
 }

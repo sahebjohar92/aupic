@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -17,7 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.aupic.aupic.Activity.aupic.AupicCreatorActivity;
 import com.aupic.aupic.Adaptors.Aupic_Creator.AupicSideBarImageAdaptor;
@@ -51,6 +54,9 @@ public abstract class AupFragmentActivity extends ActionBarActivity {
     protected ActionBar actionBar;
     protected String titleText = "";
     protected AupicSideBarViewHolder.SelectedSideBarImage selectedSideBarImageListener;
+
+    protected int position = 0;
+    protected MediaController mediaControls;
 
     protected abstract int getContentViewId();
 
@@ -154,6 +160,44 @@ public abstract class AupFragmentActivity extends ActionBarActivity {
             width = (int) (height * bitmapRatio);
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
+    protected void initializeVideoPlayer(final VideoView myVideoView, String  filePath) {
+
+        if (mediaControls == null) {
+            mediaControls = new MediaController(this);
+        }
+
+        try {
+            //set the media controller in the VideoView
+            myVideoView.setMediaController(mediaControls);
+
+            //set the uri of the video to be played
+            myVideoView.setVideoURI(Uri.parse(filePath));
+
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            e.printStackTrace();
+        }
+
+        myVideoView.requestFocus();
+        //we also set an setOnPreparedListener in order to know when the video file is ready for playback
+        myVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                // close the progress bar and play the video
+                //if we have a position on savedInstanceState, the video playback should start from here
+                myVideoView.seekTo(position);
+                if (position == 0) {
+                    myVideoView.start();
+                } else {
+                    //if we come from a resumed activity, video playback will be paused
+                    myVideoView.pause();
+                }
+            }
+        });
+
+
     }
 
     @SuppressWarnings("unchecked")

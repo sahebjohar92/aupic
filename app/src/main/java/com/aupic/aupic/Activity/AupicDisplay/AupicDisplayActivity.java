@@ -49,8 +49,7 @@ public class AupicDisplayActivity extends AupFragmentActivity {
         return R.layout.video_view;
     }
 
-    private int position = 0;
-    private MediaController mediaControls;
+
     private String filePath;
     private String mimeType;
     private Context context;
@@ -98,47 +97,11 @@ public class AupicDisplayActivity extends AupFragmentActivity {
             filePath = getIntent().getStringExtra(IntentConstants.VIDEO_FILE_PATH);
             mimeType = getIntent().getStringExtra(IntentConstants.MINE_TYPE);
 
-            initializeVideoPlayer();
+            initializeVideoPlayer(myVideoView, filePath);
         }
     }
 
-    private void initializeVideoPlayer() {
 
-        if (mediaControls == null) {
-            mediaControls = new MediaController(AupicDisplayActivity.this);
-        }
-
-        try {
-            //set the media controller in the VideoView
-            myVideoView.setMediaController(mediaControls);
-
-            //set the uri of the video to be played
-            myVideoView.setVideoURI(Uri.parse(filePath));
-
-        } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-            e.printStackTrace();
-        }
-
-        myVideoView.requestFocus();
-        //we also set an setOnPreparedListener in order to know when the video file is ready for playback
-        myVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                // close the progress bar and play the video
-                //if we have a position on savedInstanceState, the video playback should start from here
-                myVideoView.seekTo(position);
-                if (position == 0) {
-                    myVideoView.start();
-                } else {
-                    //if we come from a resumed activity, video playback will be paused
-                    myVideoView.pause();
-                }
-            }
-        });
-
-
-    }
 
     private void shareAupic() {
 
