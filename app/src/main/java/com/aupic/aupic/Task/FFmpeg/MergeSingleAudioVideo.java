@@ -17,7 +17,6 @@ public class MergeSingleAudioVideo extends AsyncTask<Object, String, Boolean> {
     GenerateFileNames generateFileNames = new GenerateFileNames();
     private Context context;
     Boolean created;
-    PowerManager.WakeLock wakeLock;
     String videoFile;
     String imageFile;
     String audioFile;

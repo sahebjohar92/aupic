@@ -2,28 +2,16 @@ package com.aupic.aupic.Holder.Gallery;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.util.LruCache;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.aupic.aupic.Activity.gallery.GalleryImagesActivity;
 import com.aupic.aupic.R;
-import com.aupic.aupic.Task.ImageGallery.GetImagesTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -38,6 +26,7 @@ public class GalleryImageViewHolder  {
 
     @InjectView(R.id.select_box)
     ImageView selectBox;
+
 
     public interface SelectedImagesMap {
 

@@ -3,18 +3,15 @@ package com.aupic.aupic.Holder.Aupic_Creator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aupic.aupic.Constant.StringConstants;
-import com.aupic.aupic.Holder.Media.RecordAudioViewHolder;
 import com.aupic.aupic.Holder.Media.SelectedImagesDTO;
 import com.aupic.aupic.R;
 import com.squareup.picasso.Picasso;
@@ -35,7 +32,7 @@ public class AupicSideBarViewHolder {
     @InjectView(R.id.thumbImage)
     com.aupic.aupic.Graphics.SquareImageWithoutFade thumbImage;
 
-    @InjectView(R.id.thumbImageBorder)
+    @InjectView(R.id.thumbImageSideViewBorder)
     com.aupic.aupic.Graphics.SquareImageWithoutFade thumbImageBorder;
 
     @InjectView(R.id.select_box)
@@ -150,7 +147,7 @@ public class AupicSideBarViewHolder {
 
         thumbImageBorder.setVisibility(View.VISIBLE);
         thumbImage.setVisibility(View.GONE);
-        galleryImageLayout.setBackgroundResource(R.drawable.border_box_sky_blue);
+        galleryImageLayout.setBackgroundResource(R.drawable.border_box_royal_blue);
     }
 
     private void showNotSelectedImage() {

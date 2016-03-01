@@ -33,9 +33,9 @@
         android:layout_weight="1">
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:background="@drawable/border_box_maroon"
             android:layout_weight="1"
             android:padding="@dimen/size_8">
@@ -79,11 +79,17 @@
 
             <VideoView
                 android:id="@+id/vv_main_video"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:visibility="gone"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
