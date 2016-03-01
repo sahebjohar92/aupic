@@ -291,6 +291,7 @@ public class AupicCreatorActivity extends AupFragmentActivity implements AupicSi
 
     @Override
     public void onBackPressed() {
+        AppBus.getInstance().unregister(this);
         super.onBackPressed();
         openMainActivity();
     }

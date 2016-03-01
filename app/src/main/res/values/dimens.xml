@@ -17,6 +17,8 @@
     <dimen name="size_12">12sp</dimen>
     <dimen name="size_10">10sp</dimen>
     <dimen name="size_8">8sp</dimen>
+    <dimen name="size_7">7sp</dimen>
+    <dimen name="size_6">6sp</dimen>
     <dimen name="size_5">5sp</dimen>
     <dimen name="size_4">4sp</dimen>
     <dimen name="size_3">3sp</dimen>
