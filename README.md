@@ -8,8 +8,8 @@ videos, edit music files and many more functionalities.
 
 ### How do I get set up? ###
 
-Download Android SDK
-Download Java-7
-Download Android Studio
-Take Clone of the repo
-Load project in android studio
+* Download Android SDK
+* Download Java-7
+* Download Android Studio
+* Take Clone of the repo
+* Load project in android studio
